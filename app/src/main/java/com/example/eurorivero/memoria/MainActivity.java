@@ -3,6 +3,8 @@ package com.example.eurorivero.memoria;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -84,10 +86,15 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.drawer_item_Dificultad) {
 
+            Fragment fragment  = new FragmentDificultad();
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction().replace(R.id.contenedor, fragment).commit();
+
         } else if (id == R.id.drawer_item_records_nivel1) {
 
         } else if (id == R.id.drawer_item_records_nivel2) {
-
 
         }
 
@@ -95,4 +102,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
