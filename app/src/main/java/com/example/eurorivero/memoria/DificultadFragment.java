@@ -12,7 +12,7 @@ import android.widget.RadioButton;
  * Created by Fabiana Nazaret on 19/11/2017.
  */
 
-public class FragmentDificultad extends Fragment implements View.OnClickListener
+public class DificultadFragment extends Fragment implements View.OnClickListener
 {
     Configuraciones conf;
 

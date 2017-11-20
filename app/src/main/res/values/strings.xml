@@ -5,8 +5,14 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="dificultad">Dificultad</string>
+    <string name="tiempo">Tiempo</string>
+    <string name="tiempo_99">99:99</string>
+    <string name="vidas">Vidas</string>
+    <string name="vidas_9">9</string>
     <string name="Nivel1">Nivel 1</string>
     <string name="Nivel2">Nivel 2</string>
     <string name="Nivel3">Nivel 3</string>
+    <string name="Cargando">...Cargando...</string>
 
 </resources>
