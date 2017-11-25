@@ -14,5 +14,6 @@
     <string name="Nivel2">Nivel 2</string>
     <string name="Nivel3">Nivel 3</string>
     <string name="Cargando">...Cargando...</string>
+    <string name="Espacio"> </string>
 
 </resources>
