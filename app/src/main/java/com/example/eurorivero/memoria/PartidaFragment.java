@@ -13,24 +13,18 @@ import android.view.ViewGroup;
 public class PartidaFragment extends Fragment
 {
     Configuraciones conf;
+    PartidaModel pm;
+    PartidaView pv;
+    PartidaController pc;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstateState)
     {
         View v = inflater.inflate(R.layout.layout_partida, container, false);
 
         conf = Configuraciones.getInstance();
-        switch(Configuraciones.getDificultad())
-        {
-            case NIVEL1:
-
-                break;
-            case NIVEL2:
-
-                break;
-            case NIVEL3:
-
-                break;
-        }
+        pm = PartidaModel.getInstance();
+        pv = new PartidaView(v);
+        pc = new PartidaController(pm,pv);
 
         return v;
     }
