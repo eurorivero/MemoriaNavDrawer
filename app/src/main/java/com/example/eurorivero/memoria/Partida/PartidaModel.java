@@ -24,7 +24,7 @@ public class PartidaModel {
     private static final int FILAS = 4;
     private static final int COLUMNAS = 3;
 
-    private static Tarjeta[][] tarjetas2 = new Tarjeta[FILAS][COLUMNAS];
+    private static Tarjeta[][] tarjetas = new Tarjeta[FILAS][COLUMNAS];
 
     static PartidaModel getInstance() {
         return ourInstance;
@@ -57,17 +57,17 @@ public class PartidaModel {
         {
             for (int j = 0; j < COLUMNAS; j++)
             {
-                tarjetas2[i][j] = new Tarjeta();
+                tarjetas[i][j] = new Tarjeta();
 
                 do
                 {
-                    tarjetas2[i][j].setIdImagen(rn.nextInt(6));
+                    tarjetas[i][j].setIdImagen(rn.nextInt(6));
                 }
-                while (contadores[tarjetas2[i][j].getIdImagen()]==0); // Se acabaron los tokens disponibles para ese tipo de tarjeta?
-                //Log.d("PartidaModel","PartidaModel " + "; i = " + i + "; j = " + j + "; Tipo Tarjeta =" + tarjetas2[i][j]);
+                while (contadores[tarjetas[i][j].getIdImagen()]==0); // Se acabaron los tokens disponibles para ese tipo de tarjeta?
+                //Log.d("PartidaModel","PartidaModel " + "; i = " + i + "; j = " + j + "; Tipo Tarjeta =" + tarjetas[i][j]);
 
-                contadores[tarjetas2[i][j].getIdImagen()]--;
-                tarjetas2[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
+                contadores[tarjetas[i][j].getIdImagen()]--;
+                tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
 
             }
         }
@@ -85,7 +85,7 @@ public class PartidaModel {
 
     public Tarjeta getTarjeta(int fila, int columna)
     {
-        return(tarjetas2[fila][columna]);
+        return(tarjetas[fila][columna]);
     }
 
 }

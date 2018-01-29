@@ -1,6 +1,5 @@
 package com.example.eurorivero.memoria.Partida;
 
-import android.util.Log;
 import android.view.View;
 
 import com.example.eurorivero.memoria.Configuraciones;
@@ -35,13 +34,14 @@ public class PartidaController implements View.OnClickListener{
                 pm.configurarPartida(3,9);
         }
         pv.setTarjetasListeners(this);
-        Log.d("PartidaController","PartidaController builder executed.");
+        //Log.d("PartidaController","PartidaController builder executed.");
+
     }
 
     @Override
     public void onClick(View v)
     {
-        int f,c,r;
+        int f,c;
         Tarjeta t;
 
         switch(v.getId())
@@ -100,6 +100,15 @@ public class PartidaController implements View.OnClickListener{
                 break;
         }
         t = pm.getTarjeta(f,c);
-        pv.voltearTarjeta(t.getIdImagen(),v);
+        if(t.getEstado()== Tarjeta.TarjetaEstado.OCULTA)
+        {
+            t.setEstado(Tarjeta.TarjetaEstado.VISIBLE);
+            pv.mostrarTarjeta(t.getIdImagen(),v);
+        }
+        else if(t.getEstado()== Tarjeta.TarjetaEstado.VISIBLE)
+        {
+            t.setEstado(Tarjeta.TarjetaEstado.OCULTA);
+            pv.ocultarTarjeta(v);
+        }
     }
 }

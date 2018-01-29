@@ -1,6 +1,5 @@
 package com.example.eurorivero.memoria.Partida;
 
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +21,7 @@ public class PartidaView
     private ImageView iv_3_0, iv_3_1, iv_3_2;
 
     private int[] Res = new int[TIPOS_DE_TARJETA];
+    private int ResDorso;
 
     PartidaView(View v)
     {
@@ -41,6 +41,7 @@ public class PartidaView
         iv_3_1 = (ImageView)v.findViewById(R.id.iv3_1);
         iv_3_2 = (ImageView)v.findViewById(R.id.iv3_2);
 
+        ResDorso = v.getResources().getIdentifier("question_icon", "drawable","com.example.eurorivero.memoria");
         Res[0] = v.getResources().getIdentifier("img_1", "drawable","com.example.eurorivero.memoria");
         Res[1] = v.getResources().getIdentifier("img_2", "drawable","com.example.eurorivero.memoria");
         Res[2] = v.getResources().getIdentifier("img_3", "drawable","com.example.eurorivero.memoria");
@@ -66,10 +67,16 @@ public class PartidaView
         iv_3_2.setOnClickListener(l);
     }
 
-    void voltearTarjeta(int r, View v)
+    void mostrarTarjeta(int r, View v)
     {
         ImageView iv = (ImageView) v;
         iv.setImageResource(Res[r]);
+    }
+
+    void ocultarTarjeta(View v)
+    {
+        ImageView iv = (ImageView) v;
+        iv.setImageResource(ResDorso);
     }
 
 }
