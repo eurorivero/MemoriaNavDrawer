@@ -1,10 +1,13 @@
-package com.example.eurorivero.memoria;
+package com.example.eurorivero.memoria.Partida;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.eurorivero.memoria.Configuraciones;
+import com.example.eurorivero.memoria.R;
 
 /**
  * Created by Fabiana Nazaret on 20/11/2017.

@@ -4,7 +4,7 @@ package com.example.eurorivero.memoria;
  * Created by Fabiana Nazaret on 19/11/2017.
  */
 
-class Configuraciones {
+public class Configuraciones {
     private static final Configuraciones ourInstance = new Configuraciones();
 
     public enum Dificultad
@@ -15,7 +15,7 @@ class Configuraciones {
     }
     private static Dificultad dificultad = Dificultad.NIVEL1;
 
-    static Configuraciones getInstance() {
+    public static Configuraciones getInstance() {
         return ourInstance;
     }
 

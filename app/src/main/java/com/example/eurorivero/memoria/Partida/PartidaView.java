@@ -1,9 +1,12 @@
-package com.example.eurorivero.memoria;
+package com.example.eurorivero.memoria.Partida;
 
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.eurorivero.memoria.R;
 
 /**
  * Created by Fabiana Nazaret on 25/11/2017.
@@ -11,15 +14,16 @@ import android.widget.TextView;
 
 public class PartidaView
 {
-    TextView tvVidas, tvPartidaTiempo, tvPartidaDificultad;
-    ImageView iv_0_0, iv_0_1, iv_0_2;
-    ImageView iv_1_0, iv_1_1, iv_1_2;
-    ImageView iv_2_0, iv_2_1, iv_2_2;
-    ImageView iv_3_0, iv_3_1, iv_3_2;
+    private static final int TIPOS_DE_TARJETA = 6;
+    private TextView tvVidas, tvPartidaTiempo, tvPartidaDificultad;
+    private ImageView iv_0_0, iv_0_1, iv_0_2;
+    private ImageView iv_1_0, iv_1_1, iv_1_2;
+    private ImageView iv_2_0, iv_2_1, iv_2_2;
+    private ImageView iv_3_0, iv_3_1, iv_3_2;
 
-    int res;
+    private int[] Res = new int[TIPOS_DE_TARJETA];
 
-    public PartidaView(View v)
+    PartidaView(View v)
     {
         tvVidas = (TextView)v.findViewById(R.id.tv_partida_vidas);
         tvPartidaTiempo = (TextView)v.findViewById(R.id.tv_partida_tiempo);
@@ -37,10 +41,16 @@ public class PartidaView
         iv_3_1 = (ImageView)v.findViewById(R.id.iv3_1);
         iv_3_2 = (ImageView)v.findViewById(R.id.iv3_2);
 
-        res = v.getResources().getIdentifier("img_5", "drawable","com.example.eurorivero.memoria");
+        Res[0] = v.getResources().getIdentifier("img_1", "drawable","com.example.eurorivero.memoria");
+        Res[1] = v.getResources().getIdentifier("img_2", "drawable","com.example.eurorivero.memoria");
+        Res[2] = v.getResources().getIdentifier("img_3", "drawable","com.example.eurorivero.memoria");
+        Res[3] = v.getResources().getIdentifier("img_4", "drawable","com.example.eurorivero.memoria");
+        Res[4] = v.getResources().getIdentifier("img_5", "drawable","com.example.eurorivero.memoria");
+        Res[5] = v.getResources().getIdentifier("img_6", "drawable","com.example.eurorivero.memoria");
+        Log.d("PartidaView","PartidaView builder executed.");
     }
 
-    public void setTarjetasListeners(View.OnClickListener l)
+    void setTarjetasListeners(View.OnClickListener l)
     {
         iv_0_0.setOnClickListener(l);
         iv_0_1.setOnClickListener(l);
@@ -56,27 +66,10 @@ public class PartidaView
         iv_3_2.setOnClickListener(l);
     }
 
-    public void voltearTarjeta(View v)
+    void voltearTarjeta(int r, View v)
     {
-        switch(v.getId()) {
-            case R.id.iv0_0:
-            case R.id.iv0_1:
-            case R.id.iv0_2:
-            case R.id.iv1_0:
-            case R.id.iv1_1:
-            case R.id.iv1_2:
-            case R.id.iv2_0:
-            case R.id.iv2_1:
-            case R.id.iv2_2:
-            case R.id.iv3_0:
-            case R.id.iv3_1:
-            case R.id.iv3_2:
-                ImageView iv = (ImageView) v;
-                iv.setImageResource(res);
-                break;
-            default:
-                break;
-        }
+        ImageView iv = (ImageView) v;
+        iv.setImageResource(Res[r]);
     }
 
 }
