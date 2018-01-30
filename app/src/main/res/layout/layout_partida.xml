@@ -167,5 +167,11 @@
         android:text="@string/Cargando"
         android:textAlignment="center" />
 
+    <Button
+        android:id="@+id/bIniciarTerminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Iniciar" />
+
 </LinearLayout>
 

@@ -19,6 +19,7 @@ public class PartidaModel {
 
     private static final PartidaModel ourInstance = new PartidaModel();
     private static int vidas;
+    private static final int MAX_VIDAS = 3;
     private static int timeoutPrevio;
     private static int timeout;
     private static final int FILAS = 4;
@@ -35,15 +36,20 @@ public class PartidaModel {
 
     }
 
-    void configurarPartida(int vidas, int timeoutPrevio)
+    void inicializarTarjetas()
     {
-        this.vidas = vidas;
-        this.timeoutPrevio = timeoutPrevio;
-
-        inicializarTarjetas();
+        for (int i = 0; i < FILAS; i++)
+        {
+            for (int j = 0; j < COLUMNAS; j++)
+            {
+                tarjetas[i][j] = new Tarjeta();
+                tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
+                tarjetas[i][j].setIdImagen(1);
+            }
+        }
     }
 
-    private void inicializarTarjetas()
+    void desordenarTarjetas()
     {
         int[] contadores = new int[6];
         Random rn = new Random();
@@ -57,8 +63,6 @@ public class PartidaModel {
         {
             for (int j = 0; j < COLUMNAS; j++)
             {
-                tarjetas[i][j] = new Tarjeta();
-
                 do
                 {
                     tarjetas[i][j].setIdImagen(rn.nextInt(6));
@@ -83,9 +87,24 @@ public class PartidaModel {
         return vidas;
     }
 
+    void resetVidas()
+    {
+        this.vidas=MAX_VIDAS;
+    }
+
     public Tarjeta getTarjeta(int fila, int columna)
     {
         return(tarjetas[fila][columna]);
     }
 
+    void ocultarTarjetas()
+    {
+        for (int i = 0; i < FILAS; i++)
+        {
+            for (int j = 0; j < COLUMNAS; j++)
+            {
+                tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
+            }
+        }
+    }
 }
