@@ -1,5 +1,7 @@
 package com.example.eurorivero.memoria.Partida;
 
+import com.example.eurorivero.memoria.Configuraciones;
+
 import java.util.Random;
 
 public class PartidaModel {
@@ -105,5 +107,28 @@ public class PartidaModel {
                 tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
             }
         }
+    }
+
+    void setTimeout(Configuraciones.Dificultad d)
+    {
+        switch(d)
+        {
+            case NIVEL1:
+                timeout = 9;
+                break;
+            case NIVEL2:
+                timeout = 6;
+                break;
+            case NIVEL3:
+                timeout = 3;
+                break;
+            default:
+                break;
+        }
+    }
+
+    int getTimeout()
+    {
+        return(timeout);
     }
 }

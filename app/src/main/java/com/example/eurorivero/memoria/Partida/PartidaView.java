@@ -21,7 +21,6 @@ public class PartidaView
     private static final int TIPOS_DE_TARJETA = 6;
     private TextView tvVidas, tvPartidaTiempo, tvPartidaDificultad;
     private Chronometer cCronometro;
-    private boolean chronometerBusy;
     private boolean timerOrChronometer;
     private ImageView iv_0_0, iv_0_1, iv_0_2;
     private ImageView iv_1_0, iv_1_1, iv_1_2;
@@ -83,48 +82,42 @@ public class PartidaView
         cCronometro.setOnChronometerTickListener(l);
     }
 
-    void startChronometer()
+    long startChronometer()
     {
         timerOrChronometer = false;
         cCronometro.setBase(SystemClock.elapsedRealtime());
         cCronometro.start();
-        chronometerBusy = true;
+        return(cCronometro.getBase());
     }
 
     void stopChronometer()
     {
         cCronometro.stop();
-        chronometerBusy = false;
     }
 
-    void startTimer()
+    long startTimer(int timeout)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
         {
-            cCronometro.setBase(SystemClock.elapsedRealtime()+9000);
+            cCronometro.setBase(SystemClock.elapsedRealtime()+timeout*1000);
             cCronometro.setCountDown(true);
-            chronometerBusy = true;
             timerOrChronometer = true;
             cCronometro.start();
+            return(cCronometro.getBase());
         }
         else
         {
-            startChronometer();
+            return(startChronometer());
         }
     }
 
-    void stopTimer()
+    long stopTimer()
     {
         cCronometro.stop();
-        chronometerBusy = false;
+        return(SystemClock.elapsedRealtime());
     }
 
-    boolean isChronometerBusy()
-    {
-        return(chronometerBusy);
-    }
-
-    int getChronometerSeconds()
+/*    int getChronometerSeconds()
     {
         CharSequence t;
         int l,s;
@@ -132,15 +125,19 @@ public class PartidaView
         l = t.length();
         t = t.subSequence(l-2,l);
         s = Integer.parseInt(t.toString());
-        Log.d("PartidaVista","getChronometerSeconds: "+t+" "+s);
         return(s);
     }
-
+*/
     boolean isTimerOrChronometer()
     {
         //true = timer
         //false = chronometer
         return(timerOrChronometer);
+    }
+
+    long getBase()
+    {
+        return(cCronometro.getBase());
     }
 
     void setBotonIniciarTerminarListener(View.OnClickListener l)

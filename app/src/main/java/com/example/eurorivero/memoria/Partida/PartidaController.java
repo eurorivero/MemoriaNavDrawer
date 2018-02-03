@@ -1,6 +1,7 @@
 package com.example.eurorivero.memoria.Partida;
 
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
@@ -16,6 +17,10 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
 
     private PartidaModel pm;
     private PartidaView pv;
+    private long previousStartTime;
+    private long startTime;
+    private long stopTime;
+    private long currentTime;
 
     PartidaController(PartidaModel pm, PartidaView pv)
     {
@@ -33,6 +38,8 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         pm.resetVidas();
         pv.setVidas(pm.getVidas());
         pv.setDificultad(Configuraciones.getDificultad());
+        previousStartTime = 0;
+        startTime = 0;
         Log.d("PartidaController","PartidaController builder executed.");
     }
 
@@ -149,11 +156,13 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         pm.resetVidas();
         pv.setVidas(pm.getVidas());
         pv.setDificultad(Configuraciones.getDificultad());
-        if(!pv.isChronometerBusy())
-        {
-            //pv.startChronometer();
-            pv.startTimer();
-        }
+        pm.setTimeout(Configuraciones.getDificultad());
+        //if(!pv.isChronometerBusy())
+        //{
+            previousStartTime = startTime;
+            startTime = pv.startChronometer();
+            //startTime = pv.startTimer(pm.getTimeout());
+        //}
     }
 
     private void terminarPartida()
@@ -165,26 +174,25 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         pm.resetVidas();
         pv.setVidas(pm.getVidas());
         pv.setDificultad(Configuraciones.getDificultad());
-        if(pv.isChronometerBusy())
-        {
-            //pv.stopChronometer();
-            pv.stopTimer();
-        }
+        pv.stopChronometer();
     }
 
     @Override
     public void onChronometerTick(Chronometer chronometer)
     {
-        int segs = pv.getChronometerSeconds();
+        int segs;
 
-        Log.d("PartidaController","onChronometerTick: "+segs);
-        if (!pv.isTimerOrChronometer() && segs == 9)
+        if(startTime>previousStartTime)
         {
-            terminarPartida();
-        }
-        else if (pv.isTimerOrChronometer() && segs == 0)
-        {
-            terminarPartida();
+            currentTime = SystemClock.elapsedRealtime();
+            segs =(int) ((currentTime - startTime)/1000);
+
+            Log.d("PartidaControllerOnChronometerTick","startTime: "+startTime+" currentTime: "+currentTime+" segs: "+segs+" estado: "+pm.estadoPartida.toString());
+
+            if(segs>=pm.getTimeout())
+            {
+                terminarPartida();
+            }
         }
     }
 }
