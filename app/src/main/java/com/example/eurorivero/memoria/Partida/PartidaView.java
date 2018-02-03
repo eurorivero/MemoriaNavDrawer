@@ -1,9 +1,11 @@
 package com.example.eurorivero.memoria.Partida;
 
+import android.os.Build;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +20,9 @@ public class PartidaView
 {
     private static final int TIPOS_DE_TARJETA = 6;
     private TextView tvVidas, tvPartidaTiempo, tvPartidaDificultad;
+    private Chronometer cCronometro;
+    private boolean chronometerBusy;
+    private boolean timerOrChronometer;
     private ImageView iv_0_0, iv_0_1, iv_0_2;
     private ImageView iv_1_0, iv_1_1, iv_1_2;
     private ImageView iv_2_0, iv_2_1, iv_2_2;
@@ -30,7 +35,7 @@ public class PartidaView
     PartidaView(View v)
     {
         tvVidas = (TextView)v.findViewById(R.id.tv_partida_vidas);
-        tvPartidaTiempo = (TextView)v.findViewById(R.id.tv_partida_tiempo);
+        cCronometro = (Chronometer)v.findViewById(R.id.cCronometro);
         tvPartidaDificultad = (TextView)v.findViewById(R.id.tv_partida_dificultad);
         iv_0_0 = (ImageView)v.findViewById(R.id.iv0_0);
         iv_0_1 = (ImageView)v.findViewById(R.id.iv0_1);
@@ -71,6 +76,71 @@ public class PartidaView
         iv_3_0.setOnClickListener(l);
         iv_3_1.setOnClickListener(l);
         iv_3_2.setOnClickListener(l);
+    }
+
+    void setChronometerListener(Chronometer.OnChronometerTickListener l)
+    {
+        cCronometro.setOnChronometerTickListener(l);
+    }
+
+    void startChronometer()
+    {
+        timerOrChronometer = false;
+        cCronometro.setBase(SystemClock.elapsedRealtime());
+        cCronometro.start();
+        chronometerBusy = true;
+    }
+
+    void stopChronometer()
+    {
+        cCronometro.stop();
+        chronometerBusy = false;
+    }
+
+    void startTimer()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            cCronometro.setBase(SystemClock.elapsedRealtime()+9000);
+            cCronometro.setCountDown(true);
+            chronometerBusy = true;
+            timerOrChronometer = true;
+            cCronometro.start();
+        }
+        else
+        {
+            startChronometer();
+        }
+    }
+
+    void stopTimer()
+    {
+        cCronometro.stop();
+        chronometerBusy = false;
+    }
+
+    boolean isChronometerBusy()
+    {
+        return(chronometerBusy);
+    }
+
+    int getChronometerSeconds()
+    {
+        CharSequence t;
+        int l,s;
+        t = cCronometro.getText();
+        l = t.length();
+        t = t.subSequence(l-2,l);
+        s = Integer.parseInt(t.toString());
+        Log.d("PartidaVista","getChronometerSeconds: "+t+" "+s);
+        return(s);
+    }
+
+    boolean isTimerOrChronometer()
+    {
+        //true = timer
+        //false = chronometer
+        return(timerOrChronometer);
     }
 
     void setBotonIniciarTerminarListener(View.OnClickListener l)

@@ -20,7 +20,6 @@ public class PartidaModel {
     private static final PartidaModel ourInstance = new PartidaModel();
     private static int vidas;
     private static final int MAX_VIDAS = 3;
-    private static int timeoutPrevio;
     private static int timeout;
     private static final int FILAS = 4;
     private static final int COLUMNAS = 3;

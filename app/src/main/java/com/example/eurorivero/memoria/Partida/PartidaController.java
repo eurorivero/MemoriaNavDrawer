@@ -1,7 +1,9 @@
 package com.example.eurorivero.memoria.Partida;
 
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.widget.Chronometer;
 
 import com.example.eurorivero.memoria.Configuraciones;
 import com.example.eurorivero.memoria.R;
@@ -10,7 +12,7 @@ import com.example.eurorivero.memoria.R;
  * Created by Fabiana Nazaret on 25/11/2017.
  */
 
-public class PartidaController implements View.OnClickListener{
+public class PartidaController implements View.OnClickListener, Chronometer.OnChronometerTickListener{
 
     private PartidaModel pm;
     private PartidaView pv;
@@ -22,6 +24,7 @@ public class PartidaController implements View.OnClickListener{
 
         pv.setTarjetasListeners(this);
         pv.setBotonIniciarTerminarListener(this);
+        pv.setChronometerListener(this);
 
         pm.estadoPartida = PartidaModel.EstadoPartida.INICIAL;
         pm.inicializarTarjetas();
@@ -138,7 +141,7 @@ public class PartidaController implements View.OnClickListener{
         }
     }
 
-    void iniciarPartida()
+    private void iniciarPartida()
     {
         pm.estadoPartida = PartidaModel.EstadoPartida.CORRIENDO;
         pv.setTextBotonIniciarTerminar("Terminar");
@@ -146,9 +149,14 @@ public class PartidaController implements View.OnClickListener{
         pm.resetVidas();
         pv.setVidas(pm.getVidas());
         pv.setDificultad(Configuraciones.getDificultad());
+        if(!pv.isChronometerBusy())
+        {
+            //pv.startChronometer();
+            pv.startTimer();
+        }
     }
 
-    void terminarPartida()
+    private void terminarPartida()
     {
         pm.estadoPartida = PartidaModel.EstadoPartida.INICIAL;
         pv.setTextBotonIniciarTerminar("Iniciar");
@@ -157,5 +165,26 @@ public class PartidaController implements View.OnClickListener{
         pm.resetVidas();
         pv.setVidas(pm.getVidas());
         pv.setDificultad(Configuraciones.getDificultad());
+        if(pv.isChronometerBusy())
+        {
+            //pv.stopChronometer();
+            pv.stopTimer();
+        }
+    }
+
+    @Override
+    public void onChronometerTick(Chronometer chronometer)
+    {
+        int segs = pv.getChronometerSeconds();
+
+        Log.d("PartidaController","onChronometerTick: "+segs);
+        if (!pv.isTimerOrChronometer() && segs == 9)
+        {
+            terminarPartida();
+        }
+        else if (pv.isTimerOrChronometer() && segs == 0)
+        {
+            terminarPartida();
+        }
     }
 }
