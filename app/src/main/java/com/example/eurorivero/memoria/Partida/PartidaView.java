@@ -87,6 +87,10 @@ public class PartidaView
         timerOrChronometer = false;
         cCronometro.setBase(SystemClock.elapsedRealtime());
         cCronometro.start();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            cCronometro.setCountDown(false);
+        }
         return(cCronometro.getBase());
     }
 
@@ -159,6 +163,22 @@ public class PartidaView
         iv_3_0.setImageResource(ResDorso);
         iv_3_1.setImageResource(ResDorso);
         iv_3_2.setImageResource(ResDorso);
+    }
+
+    void mostrarTarjetas(Tarjeta tarjetas[][])
+    {
+        iv_0_0.setImageResource(Res[tarjetas[0][0].getIdImagen()]);
+        iv_0_1.setImageResource(Res[tarjetas[0][1].getIdImagen()]);
+        iv_0_2.setImageResource(Res[tarjetas[0][2].getIdImagen()]);
+        iv_1_0.setImageResource(Res[tarjetas[1][0].getIdImagen()]);
+        iv_1_1.setImageResource(Res[tarjetas[1][1].getIdImagen()]);
+        iv_1_2.setImageResource(Res[tarjetas[1][2].getIdImagen()]);
+        iv_2_0.setImageResource(Res[tarjetas[2][0].getIdImagen()]);
+        iv_2_1.setImageResource(Res[tarjetas[2][1].getIdImagen()]);
+        iv_2_2.setImageResource(Res[tarjetas[2][2].getIdImagen()]);
+        iv_3_0.setImageResource(Res[tarjetas[3][0].getIdImagen()]);
+        iv_3_1.setImageResource(Res[tarjetas[3][1].getIdImagen()]);
+        iv_3_2.setImageResource(Res[tarjetas[3][2].getIdImagen()]);
     }
 
     void setVidas(int v)

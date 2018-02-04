@@ -1,6 +1,7 @@
 package com.example.eurorivero.memoria.Partida;
 
 import android.os.SystemClock;
+import android.test.PerformanceTestCase;
 import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
@@ -18,7 +19,6 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
     private PartidaView pv;
     private long previousStartTime;
     private long startTime;
-    private long stopTime;
     private long currentTime;
 
     PartidaController(PartidaModel pm, PartidaView pv)
@@ -117,9 +117,9 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                 clickSobreTarjeta = false;
                 if(pm.estadoPartida== PartidaModel.EstadoPartida.INICIAL)
                 {
-                    iniciarPartida();
+                    iniciarInspeccion();
                 }
-                else if(pm.estadoPartida== PartidaModel.EstadoPartida.CORRIENDO)
+                else if(pm.estadoPartida != PartidaModel.EstadoPartida.INICIAL)
                 {
                     terminarPartida();
                 }
@@ -150,15 +150,11 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
     private void iniciarPartida()
     {
         pm.estadoPartida = PartidaModel.EstadoPartida.CORRIENDO;
-        pv.setTextBotonIniciarTerminar("Terminar");
-        pm.desordenarTarjetas();
-        pm.resetVidas();
-        pv.setVidas(pm.getVidas());
-        pv.setDificultad(Configuraciones.getDificultad());
-        pm.setTimeout(Configuraciones.getDificultad());
-            previousStartTime = startTime;
-            //startTime = pv.startChronometer();
-            startTime = pv.startChronometerAsTimer(pm.getTimeout());
+        pv.stopChronometer();
+        pm.ocultarTarjetas();
+        pv.ocultarTarjetas();
+        previousStartTime = startTime;
+        startTime = pv.startChronometer();
     }
 
     private void terminarPartida()
@@ -185,10 +181,25 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
 
             Log.d("PartidaControllerOnChronometerTick","startTime: "+startTime+" currentTime: "+currentTime+" segs: "+segs+" estado: "+pm.estadoPartida.toString());
 
-            if(segs>=pm.getTimeout())
+            if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION && segs>=pm.getTimeout())
             {
-                terminarPartida();
+                iniciarPartida();
             }
         }
+    }
+
+    private void iniciarInspeccion()
+    {
+        pm.estadoPartida = PartidaModel.EstadoPartida.INSPECCION;
+        pv.setTextBotonIniciarTerminar("Terminar");
+        pm.resetVidas();
+        pv.setVidas(pm.getVidas());
+        pv.setDificultad(Configuraciones.getDificultad());
+        pm.setTimeout(Configuraciones.getDificultad());
+        pm.desordenarTarjetas();
+        pm.mostrarTarjetas();
+        pv.mostrarTarjetas(pm.getTarjetas());
+        previousStartTime = startTime;
+        startTime = pv.startChronometerAsTimer(pm.getTimeout());
     }
 }
