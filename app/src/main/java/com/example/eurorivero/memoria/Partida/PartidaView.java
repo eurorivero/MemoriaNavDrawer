@@ -95,7 +95,7 @@ public class PartidaView
         cCronometro.stop();
     }
 
-    long startTimer(int timeout)
+    long startChronometerAsTimer(int timeout)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
         {
@@ -103,7 +103,7 @@ public class PartidaView
             cCronometro.setCountDown(true);
             timerOrChronometer = true;
             cCronometro.start();
-            return(cCronometro.getBase());
+            return(cCronometro.getBase()-timeout*1000);
         }
         else
         {
@@ -111,24 +111,7 @@ public class PartidaView
         }
     }
 
-    long stopTimer()
-    {
-        cCronometro.stop();
-        return(SystemClock.elapsedRealtime());
-    }
-
-/*    int getChronometerSeconds()
-    {
-        CharSequence t;
-        int l,s;
-        t = cCronometro.getText();
-        l = t.length();
-        t = t.subSequence(l-2,l);
-        s = Integer.parseInt(t.toString());
-        return(s);
-    }
-*/
-    boolean isTimerOrChronometer()
+    boolean isTimer()
     {
         //true = timer
         //false = chronometer

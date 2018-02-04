@@ -1,6 +1,5 @@
 package com.example.eurorivero.memoria.Partida;
 
-import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -157,12 +156,9 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         pv.setVidas(pm.getVidas());
         pv.setDificultad(Configuraciones.getDificultad());
         pm.setTimeout(Configuraciones.getDificultad());
-        //if(!pv.isChronometerBusy())
-        //{
             previousStartTime = startTime;
-            startTime = pv.startChronometer();
-            //startTime = pv.startTimer(pm.getTimeout());
-        //}
+            //startTime = pv.startChronometer();
+            startTime = pv.startChronometerAsTimer(pm.getTimeout());
     }
 
     private void terminarPartida()
