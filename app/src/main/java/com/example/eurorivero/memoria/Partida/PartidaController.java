@@ -1,7 +1,6 @@
 package com.example.eurorivero.memoria.Partida;
 
 import android.os.SystemClock;
-import android.test.PerformanceTestCase;
 import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
@@ -136,14 +135,41 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
             t = pm.getTarjeta(f,c);
             if(t.getEstado()== Tarjeta.TarjetaEstado.OCULTA)
             {
-                t.setEstado(Tarjeta.TarjetaEstado.VISIBLE);
+                pm.mostrarTarjeta(f,c);
                 pv.mostrarTarjeta(t.getIdImagen(),v);
+                pm.contTjtasMostradas++;
+                switch(pm.contTjtasMostradas)
+                {
+                    case 1:
+                        pm.setTarjetaSeleccionada(f,c,v);
+                        break;
+                    case 2:
+                        if(!pm.verificarCoincidencia(f,c))
+                        {
+                            pm.ocultarTarjeta(f,c);
+                            pv.ocultarTarjeta(v);
+                            pm.ocultarTarjeta(pm.getFilaTarjetaSeleccionada(),pm.getColTarjetaSeleccionadas());
+                            pv.ocultarTarjeta(pm.getViewTarjetaSeleccionada());
+                        }
+                        else
+                        {
+
+                        }
+                        pm.contTjtasMostradas=0;
+                        break;
+                    default:
+
+                }
             }
-            else if(t.getEstado()== Tarjeta.TarjetaEstado.VISIBLE)
+            Tarjeta t2 = pm.getTarjeta(pm.getFilaTarjetaSeleccionada(),pm.getColTarjetaSeleccionadas());
+            Log.d("PartidaControllerOnClick","t1: "+t.getEstado().toString()+" t2: "+t2.getEstado().toString()+" cont: "+pm.contTjtasMostradas);
+            /*else if(t.getEstado()== Tarjeta.TarjetaEstado.VISIBLE)
             {
                 t.setEstado(Tarjeta.TarjetaEstado.OCULTA);
                 pv.ocultarTarjeta(v);
-            }
+                pm.ocultarTarjeta(f,c);
+            }*/
+
         }
     }
 
@@ -153,6 +179,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         pv.stopChronometer();
         pm.ocultarTarjetas();
         pv.ocultarTarjetas();
+        pm.contTjtasMostradas = 0;
         previousStartTime = startTime;
         startTime = pv.startChronometer();
     }
@@ -179,7 +206,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
             currentTime = SystemClock.elapsedRealtime();
             segs =(int) ((currentTime - startTime)/1000);
 
-            Log.d("PartidaControllerOnChronometerTick","startTime: "+startTime+" currentTime: "+currentTime+" segs: "+segs+" estado: "+pm.estadoPartida.toString());
+            //Log.d("PartidaControllerOnChronometerTick","startTime: "+startTime+" currentTime: "+currentTime+" segs: "+segs+" estado: "+pm.estadoPartida.toString());
 
             if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION && segs>=pm.getTimeout())
             {
