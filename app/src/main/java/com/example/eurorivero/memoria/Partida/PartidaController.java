@@ -130,9 +130,9 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                 break;
         }
 
+        t = pm.getTarjeta(f,c);
         if(clickSobreTarjeta && pm.estadoPartida == PartidaModel.EstadoPartida.CORRIENDO)
         {
-            t = pm.getTarjeta(f,c);
             if(t.getEstado()== Tarjeta.TarjetaEstado.OCULTA)
             {
                 pm.mostrarTarjeta(f,c);
@@ -141,19 +141,14 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                 switch(pm.contTjtasMostradas)
                 {
                     case 1:
-                        pm.setTarjetaSeleccionada(f,c,v);
+                        pm.setTarjetaSeleccionada(0,f,c,v);
                         break;
                     case 2:
                         if(!pm.verificarCoincidencia(f,c))
                         {
-                            pm.ocultarTarjeta(f,c);
-                            pv.ocultarTarjeta(v);
-                            pm.ocultarTarjeta(pm.getFilaTarjetaSeleccionada(),pm.getColTarjetaSeleccionadas());
-                            pv.ocultarTarjeta(pm.getViewTarjetaSeleccionada());
-                        }
-                        else
-                        {
-
+                            pm.setTarjetaSeleccionada(1,f,c,v);
+                            pm.estadoPartida = PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES;
+                            mostrarTarjetasDesiguales();
                         }
                         pm.contTjtasMostradas=0;
                         break;
@@ -161,16 +156,31 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
 
                 }
             }
-            Tarjeta t2 = pm.getTarjeta(pm.getFilaTarjetaSeleccionada(),pm.getColTarjetaSeleccionadas());
-            Log.d("PartidaControllerOnClick","t1: "+t.getEstado().toString()+" t2: "+t2.getEstado().toString()+" cont: "+pm.contTjtasMostradas);
-            /*else if(t.getEstado()== Tarjeta.TarjetaEstado.VISIBLE)
-            {
-                t.setEstado(Tarjeta.TarjetaEstado.OCULTA);
-                pv.ocultarTarjeta(v);
-                pm.ocultarTarjeta(f,c);
-            }*/
-
         }
+        else if(clickSobreTarjeta && pm.estadoPartida == PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES)
+        {
+            //t = pm.getTarjeta(f,c);
+            if(t.getEstado()== Tarjeta.TarjetaEstado.OCULTA)
+            {
+                pm.ocultarTarjeta(pm.getFilaTarjetaSeleccionada(0), pm.getColTarjetaSeleccionadas(0));
+                pv.ocultarTarjeta(pm.getViewTarjetaSeleccionada(0));
+                pm.ocultarTarjeta(pm.getFilaTarjetaSeleccionada(1), pm.getColTarjetaSeleccionadas(1));
+                pv.ocultarTarjeta(pm.getViewTarjetaSeleccionada(1));
+                pm.mostrarTarjeta(f,c);
+                pv.mostrarTarjeta(t.getIdImagen(),v);
+                pm.setTarjetaSeleccionada(0,f,c,v);
+                pm.contTjtasMostradas=1;
+                pm.estadoPartida = PartidaModel.EstadoPartida.CORRIENDO;
+            }
+        }
+        Tarjeta t1 = pm.getTarjeta(pm.getFilaTarjetaSeleccionada(0),pm.getColTarjetaSeleccionadas(0));
+        Tarjeta t2 = pm.getTarjeta(pm.getFilaTarjetaSeleccionada(1),pm.getColTarjetaSeleccionadas(1));
+        int f1 = pm.getFilaTarjetaSeleccionada(0);
+        int c1 = pm.getColTarjetaSeleccionadas(0);
+        int f2 = pm.getFilaTarjetaSeleccionada(1);
+        int c2 = pm.getColTarjetaSeleccionadas(1);
+
+        Log.d("PC_OnClick","EDO: "+pm.estadoPartida.toString()+" t1: "+t1.getEstado().toString()+" f1: "+f1+" c1: "+c1+" t2: "+t2.getEstado().toString()+" f2:"+f2+" c2: "+c2+" cont: "+pm.contTjtasMostradas);
     }
 
     private void iniciarPartida()
@@ -228,5 +238,10 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         pv.mostrarTarjetas(pm.getTarjetas());
         previousStartTime = startTime;
         startTime = pv.startChronometerAsTimer(pm.getTimeout());
+    }
+
+    private void mostrarTarjetasDesiguales()
+    {
+
     }
 }
