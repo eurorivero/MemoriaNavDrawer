@@ -118,9 +118,17 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                 {
                     iniciarInspeccion();
                 }
-                else if(pm.estadoPartida != PartidaModel.EstadoPartida.INICIAL)
+                else if(pm.estadoPartida == PartidaModel.EstadoPartida.CORRIENDO ||
+                        pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION ||
+                        pm.estadoPartida == PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES ||
+                        pm.estadoPartida == PartidaModel.EstadoPartida.TERMINADA_FRACASO)
                 {
-                    terminarPartida();
+                    reiniciarPartida();
+                }
+                else if(pm.estadoPartida == PartidaModel.EstadoPartida.TERMINADA_EXITO)
+                {
+                    reiniciarPartida();
+                    //Aquí se inicia el otro fragment con el resumen.
                 }
                 break;
             default:
@@ -147,13 +155,24 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                         if(!pm.verificarCoincidencia(f,c))
                         {
                             pm.setTarjetaSeleccionada(1,f,c,v);
-                            pm.estadoPartida = PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES;
+                            pm.quitarVida();
+                            pv.setVidas(pm.getVidas());
+                            if(pm.getVidas()==0)
+                            {
+                                pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_FRACASO;
+                                pv.stopChronometer();
+                                pv.setTextBotonIniciarTerminar("Reiniciar");
+                            }
+                            else
+                            {
+                                pm.estadoPartida = PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES;
+                            }
                         }
                         else
                         {
                             if(pm.todasLasTarjetasVisibles())
                             {
-                                pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA;
+                                pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_EXITO;
                                 pv.stopChronometer();
                                 pv.setTextBotonIniciarTerminar("Iniciar");
                             }
@@ -202,7 +221,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         startTime = pv.startChronometer();
     }
 
-    private void terminarPartida()
+    private void reiniciarPartida()
     {
         pm.estadoPartida = PartidaModel.EstadoPartida.INICIAL;
         pv.setTextBotonIniciarTerminar("Iniciar");
