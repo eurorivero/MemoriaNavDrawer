@@ -114,7 +114,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                 f=0;
                 c=0;
                 clickSobreTarjeta = false;
-                if(pm.estadoPartida== PartidaModel.EstadoPartida.INICIAL)
+                if(pm.estadoPartida == PartidaModel.EstadoPartida.INICIAL)
                 {
                     iniciarInspeccion();
                 }
@@ -148,7 +148,15 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                         {
                             pm.setTarjetaSeleccionada(1,f,c,v);
                             pm.estadoPartida = PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES;
-                            mostrarTarjetasDesiguales();
+                        }
+                        else
+                        {
+                            if(pm.todasLasTarjetasVisibles())
+                            {
+                                pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA;
+                                pv.stopChronometer();
+                                pv.setTextBotonIniciarTerminar("Iniciar");
+                            }
                         }
                         pm.contTjtasMostradas=0;
                         break;
@@ -238,10 +246,5 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         pv.mostrarTarjetas(pm.getTarjetas());
         previousStartTime = startTime;
         startTime = pv.startChronometerAsTimer(pm.getTimeout());
-    }
-
-    private void mostrarTarjetasDesiguales()
-    {
-
     }
 }
