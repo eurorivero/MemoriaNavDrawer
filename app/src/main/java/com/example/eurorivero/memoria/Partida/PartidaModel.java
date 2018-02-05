@@ -1,5 +1,7 @@
 package com.example.eurorivero.memoria.Partida;
 
+import android.view.View;
+
 import com.example.eurorivero.memoria.Configuraciones;
 
 import java.util.Random;
@@ -15,7 +17,9 @@ public class PartidaModel {
         INICIAL,
         INSPECCION,
         CORRIENDO,
-        TERMINADA
+        MOSTRANDO_TARJETAS_DESIGUALES,
+        TERMINADA_EXITO,
+        TERMINADA_FRACASO,
     }
     EstadoPartida estadoPartida;
 
@@ -27,6 +31,13 @@ public class PartidaModel {
     private static final int COLUMNAS = 3;
 
     private static Tarjeta[][] tarjetas = new Tarjeta[FILAS][COLUMNAS];
+    int contTjtasMostradas;
+    private static int filaTarjetaSeleccionada1;
+    private static int colTarjetaSeleccionada1;
+    private static View viewTarjetaSeleccionada1;
+    private static int filaTarjetaSeleccionada2;
+    private static int colTarjetaSeleccionada2;
+    private static View viewTarjetaSeleccionada2;
 
     static PartidaModel getInstance() {
         return ourInstance;
@@ -72,7 +83,6 @@ public class PartidaModel {
                 //Log.d("PartidaModel","PartidaModel " + "; i = " + i + "; j = " + j + "; Tipo Tarjeta =" + tarjetas[i][j]);
 
                 contadores[tarjetas[i][j].getIdImagen()]--;
-                tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
 
             }
         }
@@ -98,6 +108,11 @@ public class PartidaModel {
         return(tarjetas[fila][columna]);
     }
 
+    Tarjeta[][] getTarjetas()
+    {
+        return(tarjetas);
+    }
+
     void ocultarTarjetas()
     {
         for (int i = 0; i < FILAS; i++)
@@ -105,6 +120,17 @@ public class PartidaModel {
             for (int j = 0; j < COLUMNAS; j++)
             {
                 tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
+            }
+        }
+    }
+
+    void mostrarTarjetas()
+    {
+        for (int i = 0; i < FILAS; i++)
+        {
+            for (int j = 0; j < COLUMNAS; j++)
+            {
+                tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.VISIBLE);
             }
         }
     }
@@ -130,5 +156,89 @@ public class PartidaModel {
     int getTimeout()
     {
         return(timeout);
+    }
+
+    void mostrarTarjeta(int f, int c)
+    {
+        tarjetas[f][c].setEstado(Tarjeta.TarjetaEstado.VISIBLE);
+    }
+
+    void ocultarTarjeta(int f, int c)
+    {
+        tarjetas[f][c].setEstado(Tarjeta.TarjetaEstado.OCULTA);
+    }
+
+    void setTarjetaSeleccionada(int index ,int f, int c, View v)
+    {
+        if(index == 0)
+        {
+            filaTarjetaSeleccionada1 = f;
+            colTarjetaSeleccionada1 = c;
+            viewTarjetaSeleccionada1 = v;
+        }
+        else if(index == 1)
+        {
+            filaTarjetaSeleccionada2 = f;
+            colTarjetaSeleccionada2 = c;
+            viewTarjetaSeleccionada2 = v;
+        }
+    }
+
+    int  getFilaTarjetaSeleccionada(int index)
+    {
+        if(index==1)
+        {
+            return(filaTarjetaSeleccionada2);
+        }
+        else
+        {
+            return(filaTarjetaSeleccionada1);
+        }
+    }
+
+    int getColTarjetaSeleccionadas(int index)
+    {
+        if(index==1)
+        {
+            return(colTarjetaSeleccionada2);
+        }
+        else
+        {
+            return(colTarjetaSeleccionada1);
+        }
+    }
+
+    View getViewTarjetaSeleccionada(int index)
+    {
+        if(index==1)
+        {
+            return(viewTarjetaSeleccionada2);
+        }
+        else
+        {
+            return(viewTarjetaSeleccionada1);
+        }
+    }
+
+    boolean verificarCoincidencia(int f2, int c2)
+    {
+        Tarjeta t1 = tarjetas[filaTarjetaSeleccionada1][colTarjetaSeleccionada1];
+        Tarjeta t2 = tarjetas[f2][c2];
+        return(t1.getIdImagen()==t2.getIdImagen());
+    }
+
+    boolean todasLasTarjetasVisibles()
+    {
+        for (int i = 0; i < FILAS; i++)
+        {
+            for (int j = 0; j < COLUMNAS; j++)
+            {
+                if(tarjetas[i][j].getEstado()== Tarjeta.TarjetaEstado.OCULTA)
+                {
+                    return(false);
+                }
+            }
+        }
+        return(true);
     }
 }
