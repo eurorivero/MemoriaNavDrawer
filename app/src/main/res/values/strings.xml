@@ -15,5 +15,9 @@
     <string name="Nivel3">Nivel 3</string>
     <string name="Cargando">...Cargando...</string>
     <string name="Espacio"> </string>
+    <string name="Iniciar">Iniciar</string>
+    <string name="Terminar">Terminar</string>
+    <string name="Reiniciar">Reiniciar</string>
+
 
 </resources>

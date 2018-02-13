@@ -2,6 +2,7 @@ package com.example.eurorivero.memoria.Partida;
 
 import android.os.Build;
 import android.os.SystemClock;
+import android.provider.Telephony;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,8 @@ import com.example.eurorivero.memoria.R;
 
 public class PartidaView
 {
+    private static final PartidaView ourInstance = new PartidaView();
+    private View v;
     private static final int TIPOS_DE_TARJETA = 6;
     private TextView tvVidas, tvPartidaTiempo, tvPartidaDificultad;
     private Chronometer cCronometro;
@@ -31,7 +34,17 @@ public class PartidaView
     private int[] Res = new int[TIPOS_DE_TARJETA];
     private int ResDorso;
 
-    PartidaView(View v)
+    static PartidaView getInstance()
+    {
+        return ourInstance;
+    }
+
+    private PartidaView()
+    {
+
+    }
+
+    void setView(View v)
     {
         tvVidas = (TextView)v.findViewById(R.id.tv_partida_vidas);
         cCronometro = (Chronometer)v.findViewById(R.id.cCronometro);
@@ -57,7 +70,7 @@ public class PartidaView
         Res[3] = v.getResources().getIdentifier("img_4", "drawable","com.example.eurorivero.memoria");
         Res[4] = v.getResources().getIdentifier("img_5", "drawable","com.example.eurorivero.memoria");
         Res[5] = v.getResources().getIdentifier("img_6", "drawable","com.example.eurorivero.memoria");
-        //Log.d("PartidaView","PartidaView builder executed.");
+        //Log.d("PartidaView","PartidaView builder EXECUTED.");
 
     }
 
@@ -82,10 +95,10 @@ public class PartidaView
         cCronometro.setOnChronometerTickListener(l);
     }
 
-    long startChronometer()
+    long startChronometer(int offset)
     {
         timerOrChronometer = false;
-        cCronometro.setBase(SystemClock.elapsedRealtime());
+        cCronometro.setBase(SystemClock.elapsedRealtime()-(offset*1000));
         cCronometro.start();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
         {
@@ -111,7 +124,7 @@ public class PartidaView
         }
         else
         {
-            return(startChronometer());
+            return(startChronometer(0));
         }
     }
 
@@ -138,15 +151,159 @@ public class PartidaView
         iv.setImageResource(Res[r]);
     }
 
+    void mostrarTarjeta(int r, int f, int c)
+    {
+        switch(f)
+        {
+            case 0:
+                switch(c)
+                {
+                    case 0:
+                        mostrarTarjeta(r,iv_0_0);
+                        break;
+                    case 1:
+                        mostrarTarjeta(r,iv_0_1);
+                        break;
+                    case 2:
+                        mostrarTarjeta(r,iv_0_2);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 1:
+                switch(c)
+                {
+                    case 0:
+                        mostrarTarjeta(r,iv_1_0);
+                        break;
+                    case 1:
+                        mostrarTarjeta(r,iv_1_1);
+                        break;
+                    case 2:
+                        mostrarTarjeta(r,iv_1_2);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 2:
+                switch(c)
+                {
+                    case 0:
+                        mostrarTarjeta(r,iv_2_0);
+                        break;
+                    case 1:
+                        mostrarTarjeta(r,iv_2_1);
+                        break;
+                    case 2:
+                        mostrarTarjeta(r,iv_2_2);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 3:
+                switch(c)
+                {
+                    case 0:
+                        mostrarTarjeta(r,iv_3_0);
+                        break;
+                    case 1:
+                        mostrarTarjeta(r,iv_3_1);
+                        break;
+                    case 2:
+                        mostrarTarjeta(r,iv_3_2);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+        }
+    }
+
     void ocultarTarjeta(View v)
     {
         ImageView iv = (ImageView) v;
         iv.setImageResource(ResDorso);
     }
 
-    void setTextBotonIniciarTerminar(CharSequence text)
+    void ocultarTarjeta(int f, int c)
     {
-        bIniciarTerminar.setText(text);
+        switch(f)
+        {
+            case 0:
+                switch(c)
+                {
+                    case 0:
+                        ocultarTarjeta(iv_0_0);
+                        break;
+                    case 1:
+                        ocultarTarjeta(iv_0_1);
+                        break;
+                    case 2:
+                        ocultarTarjeta(iv_0_2);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 1:
+                switch(c)
+                {
+                    case 0:
+                        ocultarTarjeta(iv_1_0);
+                        break;
+                    case 1:
+                        ocultarTarjeta(iv_1_1);
+                        break;
+                    case 2:
+                        ocultarTarjeta(iv_1_2);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 2:
+                switch(c)
+                {
+                    case 0:
+                        ocultarTarjeta(iv_2_0);
+                        break;
+                    case 1:
+                        ocultarTarjeta(iv_2_1);
+                        break;
+                    case 2:
+                        ocultarTarjeta(iv_2_2);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 3:
+                switch(c)
+                {
+                    case 0:
+                        ocultarTarjeta(iv_3_0);
+                        break;
+                    case 1:
+                        ocultarTarjeta(iv_3_1);
+                        break;
+                    case 2:
+                        ocultarTarjeta(iv_3_2);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+        }
+    }
+
+    void setTextBotonIniciarTerminar(int resId)
+    {
+        bIniciarTerminar.setText(resId);
     }
 
     void ocultarTarjetas()
@@ -191,13 +348,13 @@ public class PartidaView
         switch(d)
         {
             case NIVEL1:
-                tvPartidaDificultad.setText("Nivel 1");
+                tvPartidaDificultad.setText(R.string.Nivel1);
                 break;
             case NIVEL2:
-                tvPartidaDificultad.setText("Nivel 2");
+                tvPartidaDificultad.setText(R.string.Nivel2);
                 break;
             case NIVEL3:
-                tvPartidaDificultad.setText("Nivel 3");
+                tvPartidaDificultad.setText(R.string.Nivel3);
                 break;
             default:
                 break;

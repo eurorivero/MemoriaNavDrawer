@@ -14,31 +14,55 @@ import com.example.eurorivero.memoria.R;
 
 public class PartidaController implements View.OnClickListener, Chronometer.OnChronometerTickListener{
 
+    private static final PartidaController ourInstance = new PartidaController();
     private PartidaModel pm;
     private PartidaView pv;
     private long previousStartTime;
     private long startTime;
     private long currentTime;
+    private long segundos;
 
-    PartidaController(PartidaModel pm, PartidaView pv)
+    static PartidaController getInstance()
     {
-        this.pm = pm;
-        this.pv = pv;
+        return ourInstance;
+    }
 
-        pv.setTarjetasListeners(this);
-        pv.setBotonIniciarTerminarListener(this);
-        pv.setChronometerListener(this);
-
-        pm.estadoPartida = PartidaModel.EstadoPartida.INICIAL;
-        pm.inicializarTarjetas();
-        pm.ocultarTarjetas();
-        pv.ocultarTarjetas();
-        pm.resetVidas();
-        pv.setVidas(pm.getVidas());
-        pv.setDificultad(Configuraciones.getDificultad());
+    private PartidaController()
+    {
         previousStartTime = 0;
         startTime = 0;
         Log.d("PartidaController","PartidaController builder executed.");
+    }
+
+    void setPm(PartidaModel pm)
+    {
+        this.pm = pm;
+        pm.estadoPartida = PartidaModel.EstadoPartida.INICIAL;
+        pm.inicializarTarjetas();
+        pm.ocultarTarjetas();
+        pm.resetVidas();
+    }
+
+    void setPv(PartidaView pv)
+    {
+        this.pv = pv;
+        pv.setTarjetasListeners(this);
+        pv.setBotonIniciarTerminarListener(this);
+        pv.setChronometerListener(this);
+        pv.ocultarTarjetas();
+        pv.setVidas(pm.getVidas());
+        pm.setDificultad(Configuraciones.getDificultad());
+        pv.setDificultad(pm.getDificultad());
+    }
+
+    PartidaModel getPm()
+    {
+        return(this.pm);
+    }
+
+    PartidaView getPv()
+    {
+        return(this.pv);
     }
 
     @Override
@@ -161,7 +185,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                             {
                                 pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_FRACASO;
                                 pv.stopChronometer();
-                                pv.setTextBotonIniciarTerminar("Reiniciar");
+                                pv.setTextBotonIniciarTerminar(R.string.Reiniciar);
                             }
                             else
                             {
@@ -174,7 +198,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                             {
                                 pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_EXITO;
                                 pv.stopChronometer();
-                                pv.setTextBotonIniciarTerminar("Iniciar");
+                                pv.setTextBotonIniciarTerminar(R.string.Iniciar);
                             }
                         }
                         pm.contTjtasMostradas=0;
@@ -217,37 +241,48 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         pm.ocultarTarjetas();
         pv.ocultarTarjetas();
         pm.contTjtasMostradas = 0;
+        segundos=0;
         previousStartTime = startTime;
-        startTime = pv.startChronometer();
+        startTime = pv.startChronometer(0);
     }
 
     private void reiniciarPartida()
     {
         pm.estadoPartida = PartidaModel.EstadoPartida.INICIAL;
-        pv.setTextBotonIniciarTerminar("Iniciar");
+        pv.setTextBotonIniciarTerminar(R.string.Iniciar);
         pm.ocultarTarjetas();
         pv.ocultarTarjetas();
         pm.resetVidas();
         pv.setVidas(pm.getVidas());
-        pv.setDificultad(Configuraciones.getDificultad());
+        pm.setDificultad(Configuraciones.getDificultad());
+        pv.setDificultad(pm.getDificultad());
         pv.stopChronometer();
     }
 
     @Override
     public void onChronometerTick(Chronometer chronometer)
     {
-        int segs;
+        //int segs;
 
         if(startTime>previousStartTime)
         {
+            segundos++;
+            Log.d("OnChronometerTick","segundos: "+segundos+" estado: "+pm.estadoPartida.toString()+" Ch: "+chronometer.hashCode());
             currentTime = SystemClock.elapsedRealtime();
-            segs =(int) ((currentTime - startTime)/1000);
+            //segs =(int) ((currentTime - startTime)/1000);
 
-            //Log.d("PartidaControllerOnChronometerTick","startTime: "+startTime+" currentTime: "+currentTime+" segs: "+segs+" estado: "+pm.estadoPartida.toString());
+            //Log.d("OnChronometerTick","startTime: "+startTime+" currentTime: "+currentTime+" segs: "+segs+" estado: "+pm.estadoPartida.toString());
 
-            if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION && segs>=pm.getTimeout())
+            if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION && segundos>=pm.getTimeout())
             {
                 iniciarPartida();
+                Tarjeta t1 = pm.getTarjeta(pm.getFilaTarjetaSeleccionada(0),pm.getColTarjetaSeleccionadas(0));
+                Tarjeta t2 = pm.getTarjeta(pm.getFilaTarjetaSeleccionada(1),pm.getColTarjetaSeleccionadas(1));
+                int f1 = pm.getFilaTarjetaSeleccionada(0);
+                int c1 = pm.getColTarjetaSeleccionadas(0);
+                int f2 = pm.getFilaTarjetaSeleccionada(1);
+                int c2 = pm.getColTarjetaSeleccionadas(1);
+                //Log.d("PC_OnClick","EDO: "+pm.estadoPartida.toString()+" t1: "+t1.getEstado().toString()+" f1: "+f1+" c1: "+c1+" t2: "+t2.getEstado().toString()+" f2:"+f2+" c2: "+c2+" cont: "+pm.contTjtasMostradas);
             }
         }
     }
@@ -255,15 +290,45 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
     private void iniciarInspeccion()
     {
         pm.estadoPartida = PartidaModel.EstadoPartida.INSPECCION;
-        pv.setTextBotonIniciarTerminar("Terminar");
+        pv.setTextBotonIniciarTerminar(R.string.Terminar);
+
         pm.resetVidas();
         pv.setVidas(pm.getVidas());
-        pv.setDificultad(Configuraciones.getDificultad());
+        pv.setDificultad(pm.getDificultad());
         pm.setTimeout(Configuraciones.getDificultad());
         pm.desordenarTarjetas();
         pm.mostrarTarjetas();
         pv.mostrarTarjetas(pm.getTarjetas());
+        segundos = 0;
         previousStartTime = startTime;
         startTime = pv.startChronometerAsTimer(pm.getTimeout());
+    }
+
+    void reanudarPartida(View v)
+    {
+        Tarjeta t;
+        for (int i = 0; i < PartidaModel.FILAS; i++)
+        {
+            for (int j = 0; j < PartidaModel.COLUMNAS; j++)
+            {
+                t=pm.getTarjeta(i,j);
+                if(t.getEstado()== Tarjeta.TarjetaEstado.VISIBLE)
+                    pv.mostrarTarjeta(t.getIdImagen(),i,j);
+                else if(t.getEstado()== Tarjeta.TarjetaEstado.OCULTA)
+                    pv.ocultarTarjeta(i,j);
+            }
+        }
+
+        if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION)
+        {
+            previousStartTime = startTime;
+            startTime = pv.startChronometerAsTimer(pm.getTimeout()-(int)segundos);
+        }
+        else if(pm.estadoPartida == PartidaModel.EstadoPartida.CORRIENDO ||
+                pm.estadoPartida == PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES)
+        {
+            previousStartTime = startTime;
+            startTime = pv.startChronometer((int)segundos);
+        }
     }
 }

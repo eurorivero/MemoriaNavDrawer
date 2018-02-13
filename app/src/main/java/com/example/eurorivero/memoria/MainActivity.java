@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.drawer_item_Partida) {
 
-            fragment  = new PartidaFragment();
+            fragment  = PartidaFragment.getInstance();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.contenedor, fragment).commit();
 

@@ -45,14 +45,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:textAlignment="center"
-                android:text="@string/vidas_9" />
+                android:text="@string/vidas_9"
+                android:freezesText="true"/>
 
             <Chronometer
                 android:id="@+id/cCronometro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:freezesText="true"/>
 
         </TableRow>
 
@@ -164,13 +166,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/Cargando"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:freezesText="true"/>
 
     <Button
         android:id="@+id/bIniciarTerminar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar" />
+        android:text="@string/Iniciar"
+        android:freezesText="true"/>
 
 </LinearLayout>
 

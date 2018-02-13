@@ -1,5 +1,6 @@
 package com.example.eurorivero.memoria.Partida;
 
+import android.util.Log;
 import android.view.View;
 
 import com.example.eurorivero.memoria.Configuraciones;
@@ -27,17 +28,18 @@ public class PartidaModel {
     private static int vidas;
     private static final int MAX_VIDAS = 3;
     private static int timeout;
-    private static final int FILAS = 4;
-    private static final int COLUMNAS = 3;
+    static final int FILAS = 4;
+    static final int COLUMNAS = 3;
 
     private static Tarjeta[][] tarjetas = new Tarjeta[FILAS][COLUMNAS];
     int contTjtasMostradas;
     private static int filaTarjetaSeleccionada1;
     private static int colTarjetaSeleccionada1;
-    private static View viewTarjetaSeleccionada1;
+    private View viewTarjetaSeleccionada1;
     private static int filaTarjetaSeleccionada2;
     private static int colTarjetaSeleccionada2;
-    private static View viewTarjetaSeleccionada2;
+    private View viewTarjetaSeleccionada2;
+    private static Configuraciones.Dificultad dificultad;
 
     static PartidaModel getInstance() {
         return ourInstance;
@@ -45,7 +47,7 @@ public class PartidaModel {
 
     private PartidaModel()
     {
-
+        Log.d("PartidaModel","PartidaModel builder executed");
     }
 
     void inicializarTarjetas()
@@ -88,22 +90,22 @@ public class PartidaModel {
         }
     }
 
-    public void quitarVida()
+    void quitarVida()
     {
-        this.vidas--;
+        vidas--;
     }
 
-    public int getVidas()
+    int getVidas()
     {
         return vidas;
     }
 
     void resetVidas()
     {
-        this.vidas=MAX_VIDAS;
+        vidas=MAX_VIDAS;
     }
 
-    public Tarjeta getTarjeta(int fila, int columna)
+    Tarjeta getTarjeta(int fila, int columna)
     {
         return(tarjetas[fila][columna]);
     }
@@ -240,5 +242,15 @@ public class PartidaModel {
             }
         }
         return(true);
+    }
+
+    Configuraciones.Dificultad getDificultad()
+    {
+        return dificultad;
+    }
+
+    void setDificultad(Configuraciones.Dificultad dificultad)
+    {
+        this.dificultad = dificultad;
     }
 }
