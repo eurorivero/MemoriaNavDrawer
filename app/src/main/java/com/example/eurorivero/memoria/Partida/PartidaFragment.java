@@ -61,7 +61,7 @@ public class PartidaFragment extends Fragment
         }
 
         if(!primeraVez)
-            pc.reanudarPartida(v);
+            pc.reanudarPartida();
 
         return v;
     }

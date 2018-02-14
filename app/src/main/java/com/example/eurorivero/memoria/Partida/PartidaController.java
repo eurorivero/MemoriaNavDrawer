@@ -304,7 +304,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         startTime = pv.startChronometerAsTimer(pm.getTimeout());
     }
 
-    void reanudarPartida(View v)
+    void reanudarPartida()
     {
         Tarjeta t;
         for (int i = 0; i < PartidaModel.FILAS; i++)

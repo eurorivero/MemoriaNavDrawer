@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/tv_ranking_posicion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="00"
+        android:textAlignment="center"
+        android:textSize="60sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_ranking_header_dificultad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:text="@string/dificultad"
+        android:textSize="@dimen/tvHeader"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tv_ranking_posicion"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_ranking_dificultad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/tv_ranking_header_dificultad"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_ranking_header_duracion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/duracion"
+        android:textSize="@dimen/tvHeader"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_ranking_header_dificultad"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ranking_header_dificultad" />
+
+    <TextView
+        android:id="@+id/tv_ranking_duracion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tv_ranking_dificultad"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ranking_dificultad" />
+
+    <TextView
+        android:id="@+id/tv_ranking_header_vidas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/vidas"
+        android:textSize="@dimen/tvHeader"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_ranking_header_duracion"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ranking_header_duracion" />
+
+    <TextView
+        android:id="@+id/tv_ranking_vidas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_weight="1"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tv_ranking_duracion"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ranking_duracion" />
+
+    <TextView
+        android:id="@+id/tv_ranking_header_fechaHora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_weight="1"
+        android:text="@string/fechahora"
+        android:textSize="@dimen/tvHeader"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_ranking_fechahora"
+        app:layout_constraintStart_toEndOf="@+id/tv_ranking_dificultad" />
+
+    <TextView
+        android:id="@+id/tv_ranking_fechahora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/tv_ranking_duracion"
+        app:layout_constraintStart_toStartOf="@+id/tv_ranking_header_fechaHora"
+        app:layout_constraintTop_toTopOf="@+id/tv_ranking_duracion" />
+
+</android.support.constraint.ConstraintLayout>

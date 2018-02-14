@@ -53,23 +53,21 @@ public class DificultadFragment extends Fragment implements View.OnClickListener
         switch(v.getId())
         {
             case R.id.rbNivel1:
-                Log.d("rb","Nivel 1");
                 conf = Configuraciones.getInstance();
                 conf.setDificultad(Configuraciones.Dificultad.NIVEL1);
                 break;
             case R.id.rbNivel2:
-                Log.d("rb","Nivel 2");
                 conf = Configuraciones.getInstance();
                 conf.setDificultad(Configuraciones.Dificultad.NIVEL2);
                 break;
             case R.id.rbNivel3:
-                Log.d("rb","Nivel 3");
                 conf = Configuraciones.getInstance();
                 conf.setDificultad(Configuraciones.Dificultad.NIVEL3);
                 break;
             default:
                 break;
         }
+        Log.d("rb","Nivel: "+Configuraciones.getDificultad().toString());
 
     }
 }

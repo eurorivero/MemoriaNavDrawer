@@ -10,18 +10,10 @@
             android:title="Dificultad" />
     </group>
 
-    <item android:title="Records">
-        <menu>
-            <item
-                android:id="@+id/drawer_item_records_nivel1"
-                android:title="Nivel 1" />
-            <item
-                android:id="@+id/drawer_item_records_nivel2"
-                android:title="Nivel 2" />
-            <item
-                android:id="@+id/drawer_item_records_nivel3"
-                android:title="Nivel 3" />
-        </menu>
+    <item
+        android:id="@+id/drawer_item_Rankings"
+        android:title="Rankings">
+
     </item>
 
 </menu>

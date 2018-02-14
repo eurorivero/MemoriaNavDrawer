@@ -18,6 +18,8 @@
     <string name="Iniciar">Iniciar</string>
     <string name="Terminar">Terminar</string>
     <string name="Reiniciar">Reiniciar</string>
+    <string name="duracion">Duración</string>
+    <string name="fechahora">Fecha</string>
 
 
 </resources>
