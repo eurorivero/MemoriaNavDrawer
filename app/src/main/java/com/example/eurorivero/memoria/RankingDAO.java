@@ -3,6 +3,7 @@ package com.example.eurorivero.memoria;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +15,25 @@ import java.util.List;
 public class RankingDAO implements DAOinterface<Ranking> {
 
     private SQLiteDatabase db;
+    //private SQLiteStatement statementSave;
 
     public RankingDAO(SQLiteDatabase db){
         this.db = db;
+        //statementSave = db.compileStatement("INSERT INTO personas (nombre,edad) VALUES(?,?)");
     }
 
     @Override
     public long save(Ranking type) {
-        db.execSQL("INSERT INTO Rankings "+"(FechaHora,Dificultad,Vidas,Duracion,Posicion) "+
-                    "VALUES("+type.getFechaHora()+",'"+type.getDificultad().toString()+"',"+type.getVidas()+
-                    ","+type.getDuracion()+","+type.getPosicion()+")");
-        return 0;
+
+        ContentValues values = new ContentValues();
+
+        values.put("FechaHora", type.getFechaHora());
+        values.put("Dificultad", type.getDificultad().toString());
+        values.put("Duracion", type.getDuracion());
+        values.put("Vidas", type.getVidas());
+        values.put("Posicion", type.getPosicion());
+
+        return(db.insert("Rankings",null,values));
     }
 
     @Override
@@ -33,8 +42,8 @@ public class RankingDAO implements DAOinterface<Ranking> {
 
         values.put("FechaHora", type.getFechaHora());
         values.put("Dificultad", type.getDificultad().toString());
-        values.put("Vidas", type.getVidas());
         values.put("Duracion", type.getDuracion());
+        values.put("Vidas", type.getVidas());
         values.put("Posicion", type.getPosicion());
 
         db.update("Rankings", values, "_id="+type.getId(), null);
@@ -51,7 +60,7 @@ public class RankingDAO implements DAOinterface<Ranking> {
         Cursor c;
 
         c = db.query("Rankings",
-                    new String[]{"_id","FechaHora","Dificultad","Vidas","Duracion","Posicion"},
+                    new String[]{"_id","FechaHora","Dificultad","Duracion","Vidas","Posicion"},
                     "_id="+id, null, null, null, null, null);
         if(c.moveToFirst())
         {
@@ -59,8 +68,8 @@ public class RankingDAO implements DAOinterface<Ranking> {
             r.setId(c.getLong(0));
             r.setFechaHora(c.getLong(1));
             r.setDificultad(c.getString(2));
-            r.setVidas(c.getInt(3));
-            r.setDuracion(c.getLong(4));
+            r.setDuracion(c.getLong(3));
+            r.setVidas(c.getInt(4));
             r.setPosicion(c.getInt(5));
         }
         if(!c.isClosed())
@@ -78,7 +87,7 @@ public class RankingDAO implements DAOinterface<Ranking> {
         Cursor c;
         Ranking r=null;
         c = db.query("Rankings",
-                new String[]{"_id","FechaHora","Dificultad","Vidas","Duracion","Posicion"},
+                new String[]{"_id","FechaHora","Dificultad","Duracion","Vidas","Posicion"},
                 "_id="+id, null, null, null, null, null);
 
         do {
@@ -86,8 +95,8 @@ public class RankingDAO implements DAOinterface<Ranking> {
             r.setId(c.getLong(0));
             r.setFechaHora(c.getLong(1));
             r.setDificultad(c.getString(2));
-            r.setVidas(c.getInt(3));
-            r.setDuracion(c.getLong(4));
+            r.setDuracion(c.getLong(3));
+            r.setVidas(c.getInt(4));
             r.setPosicion(c.getInt(5));
             alRankings.add(r);
         }while(c.moveToNext());

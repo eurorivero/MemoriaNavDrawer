@@ -45,7 +45,7 @@ public class MyOpenHelper extends SQLiteOpenHelper
 
         try{
             String myPath = dbFilePath + dbFileName;
-            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
         }catch(SQLiteException e){
             // Error al abrir la db, no existe, entonces la creamos
             try {
