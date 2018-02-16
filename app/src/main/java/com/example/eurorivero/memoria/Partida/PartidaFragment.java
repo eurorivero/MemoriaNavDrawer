@@ -1,5 +1,6 @@
 package com.example.eurorivero.memoria.Partida;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,6 +22,7 @@ public class PartidaFragment extends Fragment
     PartidaModel pm;
     PartidaView pv;
     PartidaController pc;
+    static SQLiteDatabase db;
 
     public static PartidaFragment getInstance()
     {
@@ -32,12 +34,17 @@ public class PartidaFragment extends Fragment
         Log.d("PartidaFragment","PartidaFragment builder executed");
     }
 
+    public static void setDB(SQLiteDatabase database){
+        db = database;
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstateState)
     {
         View v = inflater.inflate(R.layout.layout_partida, container, false);
 
         conf = Configuraciones.getInstance();
         pc = PartidaController.getInstance();
+        pc.setFA(this.getActivity());
+        pc.setDB(db);
         pm = PartidaModel.getInstance();
         pv = PartidaView.getInstance();
         Log.d("PartidaFragment","pm.EstadoPartida: "+pm.estadoPartida);

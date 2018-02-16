@@ -20,6 +20,8 @@
     <string name="Reiniciar">Reiniciar</string>
     <string name="duracion">Duración</string>
     <string name="fechahora">Fecha</string>
+    <string name="posicion">Posición</string>
+    <string name="resumen">Resumen</string>
 
 
 </resources>

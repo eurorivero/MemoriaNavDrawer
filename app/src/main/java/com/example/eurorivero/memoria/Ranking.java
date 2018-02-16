@@ -7,7 +7,7 @@ package com.example.eurorivero.memoria;
 public class Ranking {
 
     private long id;
-    private long fechaHora;
+    private String fechaHora;
     private Configuraciones.Dificultad dificultad;
     private long duracion;
     private int vidas;
@@ -15,8 +15,8 @@ public class Ranking {
 
     public long getId(){return id;}
     public void setId(long id){this.id = id;}
-    public long getFechaHora(){return fechaHora;}
-    public void setFechaHora(long fechaHora){this.fechaHora = fechaHora;}
+    public String getFechaHora(){return fechaHora;}
+    public void setFechaHora(String fechaHora){this.fechaHora = fechaHora;}
     public Configuraciones.Dificultad getDificultad(){return dificultad;}
     public void setDificultad(Configuraciones.Dificultad dificultad){this.dificultad = dificultad;}
     public void setDificultad(String dificultad){

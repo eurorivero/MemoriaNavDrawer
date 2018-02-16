@@ -2,16 +2,13 @@ package com.example.eurorivero.memoria;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,10 +33,12 @@ public class RankingsFragment extends Fragment implements View.OnClickListener{
 
         RankingDAO rankingDAO = new RankingDAO(db);
 
-        List<Ranking> rankings = new ArrayList<Ranking>();
-
+        List<Ranking> rankings;
+/*
         Ranking r1 = new Ranking();
-        r1.setFechaHora(SystemClock.elapsedRealtime());
+        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+        Log.d("RF","cdts: "+currentDateTimeString);
+        r1.setFechaHora(currentDateTimeString);
         r1.setDificultad(Configuraciones.Dificultad.NIVEL1);
         r1.setDuracion(30);
         r1.setVidas(2);
@@ -94,7 +93,6 @@ public class RankingsFragment extends Fragment implements View.OnClickListener{
 
         Ranking ranking2 = rankingDAO.get(ranking.getId());
         */
-
 
         return v;
     }

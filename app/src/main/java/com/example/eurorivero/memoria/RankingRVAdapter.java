@@ -35,7 +35,7 @@ public class RankingRVAdapter extends RecyclerView.Adapter<RankingRVViewHolder>{
         holder.tvDificultad.setText(r.getDificultad().toString());
         holder.tvDuracion.setText(Long.valueOf(r.getDuracion()).toString());
         holder.tvVidas.setText(Integer.valueOf(r.getVidas()).toString());
-        holder.tvFechaHora.setText(Long.valueOf(r.getFechaHora()).toString());
+        holder.tvFechaHora.setText(r.getFechaHora());
     }
 
     @Override

@@ -66,7 +66,7 @@ public class RankingDAO implements DAOinterface<Ranking> {
         {
             r = new Ranking();
             r.setId(c.getLong(0));
-            r.setFechaHora(c.getLong(1));
+            r.setFechaHora(c.getString(1));
             r.setDificultad(c.getString(2));
             r.setDuracion(c.getLong(3));
             r.setVidas(c.getInt(4));
@@ -89,13 +89,13 @@ public class RankingDAO implements DAOinterface<Ranking> {
         c = db.query("Rankings",
                 new String[]{"_id","FechaHora","Dificultad","Duracion","Vidas","Posicion"},
                 null, null, null, null, null, null);
-        Log.d("RankingDAO.getAll:","Rows: "+c.getCount());
+        //Log.d("RankingDAO.getAll:","Rows: "+c.getCount());
         if(c.moveToFirst() && c!=null) {
             do {
                 r = new Ranking();
-                Log.d("RankingDAO.getAll:", "r.id: " + c.getLong(0));
+                //Log.d("RankingDAO.getAll:", "r.id: " + c.getLong(0));
                 r.setId(c.getLong(0));
-                r.setFechaHora(c.getLong(1));
+                r.setFechaHora(c.getString(1));
                 r.setDificultad(c.getString(2));
                 r.setDuracion(c.getLong(3));
                 r.setVidas(c.getInt(4));

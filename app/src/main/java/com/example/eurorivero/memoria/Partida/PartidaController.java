@@ -1,12 +1,23 @@
 package com.example.eurorivero.memoria.Partida;
 
+import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
 
 import com.example.eurorivero.memoria.Configuraciones;
 import com.example.eurorivero.memoria.R;
+import com.example.eurorivero.memoria.Ranking;
+import com.example.eurorivero.memoria.RankingDAO;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * Created by Fabiana Nazaret on 25/11/2017.
@@ -21,6 +32,9 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
     private long startTime;
     private long currentTime;
     private long segundos;
+    private long tiempoInicioPartida;
+    private FragmentActivity a;
+    private SQLiteDatabase db;
 
     static PartidaController getInstance()
     {
@@ -32,6 +46,16 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         previousStartTime = 0;
         startTime = 0;
         Log.d("PartidaController","PartidaController builder executed.");
+    }
+
+    void setFA(FragmentActivity a)
+    {
+        this.a = a;
+    }
+
+    void setDB(SQLiteDatabase db)
+    {
+        this.db = db;
     }
 
     void setPm(PartidaModel pm)
@@ -199,6 +223,44 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                                 pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_EXITO;
                                 pv.stopChronometer();
                                 pv.setTextBotonIniciarTerminar(R.string.Iniciar);
+
+                                Ranking rankingPartida = new Ranking();
+                                rankingPartida.setDificultad(pm.getDificultad());
+                                rankingPartida.setDuracion((SystemClock.elapsedRealtime()-tiempoInicioPartida)/1000);
+                                rankingPartida.setFechaHora(DateFormat.getDateTimeInstance().format(new Date()));
+                                rankingPartida.setVidas(pm.getVidas());
+                                rankingPartida.setPosicion(2);
+
+                                RankingDAO rankingDAO = new RankingDAO(db);
+
+                                rankingPartida.setId(rankingDAO.save(rankingPartida));
+/*
+                                Bundle args = new Bundle();
+                                args.putInt("Posicion",rankingPartida.getPosicion());
+                                args.putString("Dificultad", rankingPartida.getDificultad().toString());
+                                args.putLong("Duracion",rankingPartida.getDuracion());
+                                args.putInt("Vidas",rankingPartida.getVidas());
+                                args.putString("FechaHora",rankingPartida.getFechaHora());
+*/
+                                ResumenFragment fragment = ResumenFragment.newInstance(rankingPartida);
+                                //Fragment fragment = new ResumenFragment();
+                                //fragment.setArguments(args);
+                                FragmentManager fragmentManager = a.getSupportFragmentManager();
+                                fragmentManager.beginTransaction().replace(R.id.contenedor, fragment).commit();
+
+                                /*
+
+                                Fragment newFragment = new ExampleFragment();
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack
+                                transaction.replace(R.id.fragment_container, newFragment);
+                                transaction.addToBackStack(null);
+
+// Commit the transaction
+                                transaction.commit();
+                                */
                             }
                         }
                         pm.contTjtasMostradas=0;
@@ -244,6 +306,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         segundos=0;
         previousStartTime = startTime;
         startTime = pv.startChronometer(0);
+        tiempoInicioPartida = startTime;
     }
 
     private void reiniciarPartida()
