@@ -176,7 +176,6 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                 else if(pm.estadoPartida == PartidaModel.EstadoPartida.TERMINADA_EXITO)
                 {
                     reiniciarPartida();
-                    //Aquí se inicia el otro fragment con el resumen.
                 }
                 break;
             default:
@@ -222,7 +221,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                             {
                                 pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_EXITO;
                                 pv.stopChronometer();
-                                pv.setTextBotonIniciarTerminar(R.string.Iniciar);
+                                pv.setTextBotonIniciarTerminar(R.string.Reiniciar);
 
                                 Ranking rankingPartida = new Ranking();
                                 rankingPartida.setDificultad(pm.getDificultad());
@@ -234,30 +233,26 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                                 RankingDAO rankingDAO = new RankingDAO(db);
 
                                 rankingPartida.setId(rankingDAO.save(rankingPartida));
-/*
+
                                 Bundle args = new Bundle();
                                 args.putInt("Posicion",rankingPartida.getPosicion());
                                 args.putString("Dificultad", rankingPartida.getDificultad().toString());
                                 args.putLong("Duracion",rankingPartida.getDuracion());
                                 args.putInt("Vidas",rankingPartida.getVidas());
                                 args.putString("FechaHora",rankingPartida.getFechaHora());
-*/
-                                ResumenFragment fragment = ResumenFragment.newInstance(rankingPartida);
-                                //Fragment fragment = new ResumenFragment();
-                                //fragment.setArguments(args);
+
+                                Fragment fragment = new ResumenFragment();
+                                fragment.setArguments(args);
                                 FragmentManager fragmentManager = a.getSupportFragmentManager();
                                 fragmentManager.beginTransaction().replace(R.id.contenedor, fragment).commit();
 
                                 /*
-
                                 Fragment newFragment = new ExampleFragment();
                                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
 // Replace whatever is in the fragment_container view with this fragment,
 // and add the transaction to the back stack
                                 transaction.replace(R.id.fragment_container, newFragment);
                                 transaction.addToBackStack(null);
-
 // Commit the transaction
                                 transaction.commit();
                                 */

@@ -53,7 +53,7 @@
             android:layout_height="match_parent" >
 
             <TextView
-                android:id="@+id/tv_ranking_header_dificultad"
+                android:id="@+id/tv_resumen_header_dificultad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -64,7 +64,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_ranking_dificultad"
+                android:id="@+id/tv_resumen_dificultad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -76,7 +76,7 @@
             android:layout_height="match_parent" >
 
             <TextView
-                android:id="@+id/tv_ranking_header_duracion"
+                android:id="@+id/tv_resumen_header_duracion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -87,7 +87,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_ranking_duracion"
+                android:id="@+id/tv_resumen_duracion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -99,7 +99,7 @@
             android:layout_height="match_parent" >
 
             <TextView
-                android:id="@+id/tv_ranking_header_vidas"
+                android:id="@+id/tv_resumen_header_vidas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -110,7 +110,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_ranking_vidas"
+                android:id="@+id/tv_resumen_vidas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -122,7 +122,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tv_ranking_header_fechaHora"
+                android:id="@+id/tv_resumen_header_fechaHora"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -133,7 +133,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_ranking_fechahora"
+                android:id="@+id/tv_resumen_fechahora"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
