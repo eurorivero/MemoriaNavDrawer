@@ -31,7 +31,7 @@ public class PartidaFragment extends Fragment
 
     private PartidaFragment()
     {
-        Log.d("PartidaFragment","PartidaFragment builder executed");
+
     }
 
     public static void setDB(SQLiteDatabase database){
@@ -46,6 +46,7 @@ public class PartidaFragment extends Fragment
         pc.setFA(this.getActivity());
         pc.setDB(db);
         pm = PartidaModel.getInstance();
+        pm.setPfView(v);
         pv = PartidaView.getInstance();
         Log.d("PartidaFragment","pm.EstadoPartida: "+pm.estadoPartida);
 
@@ -57,10 +58,11 @@ public class PartidaFragment extends Fragment
             primeraVez = true;
         }
 
-        pv.setView(v);
+        pv.setView(v, this, pm.getAlTarjetas(), pc);
         pv.setTarjetasListeners(pc);
         pv.setBotonIniciarTerminarListener(pc);
         pv.setChronometerListener(pc);
+
         if(pc.getPv() == null)
         {
             pc.setPv(pv);

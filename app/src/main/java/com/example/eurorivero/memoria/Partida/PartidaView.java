@@ -2,8 +2,11 @@ package com.example.eurorivero.memoria.Partida;
 
 import android.os.Build;
 import android.os.SystemClock;
-import android.provider.Telephony;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -12,6 +15,9 @@ import android.widget.TextView;
 
 import com.example.eurorivero.memoria.Configuraciones;
 import com.example.eurorivero.memoria.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Fabiana Nazaret on 25/11/2017.
@@ -34,6 +40,9 @@ public class PartidaView
     private int[] Res = new int[TIPOS_DE_TARJETA];
     private int ResDorso;
 
+    private RecyclerView rvTarjetas;
+    private TarjetaRVAdapter tarjetaRVAdapter;
+
     static PartidaView getInstance()
     {
         return ourInstance;
@@ -44,7 +53,7 @@ public class PartidaView
 
     }
 
-    void setView(View v)
+    void setView(View v, Fragment a, List<Tarjeta> alt, RVOnItemClick listener)
     {
         tvVidas = (TextView)v.findViewById(R.id.tv_partida_vidas);
         cCronometro = (Chronometer)v.findViewById(R.id.cCronometro);
@@ -70,8 +79,15 @@ public class PartidaView
         Res[3] = v.getResources().getIdentifier("img_4", "drawable","com.example.eurorivero.memoria");
         Res[4] = v.getResources().getIdentifier("img_5", "drawable","com.example.eurorivero.memoria");
         Res[5] = v.getResources().getIdentifier("img_6", "drawable","com.example.eurorivero.memoria");
+
         //Log.d("PartidaView","PartidaView builder EXECUTED.");
 
+        rvTarjetas = (RecyclerView)v.findViewById(R.id.rv_tarjetas);
+        LinearLayoutManager layoutManager = new GridLayoutManager(a.getContext(),4);
+        rvTarjetas.setLayoutManager(layoutManager);
+
+        tarjetaRVAdapter = new TarjetaRVAdapter(alt, listener);
+        rvTarjetas.setAdapter(tarjetaRVAdapter);
     }
 
     void setTarjetasListeners(View.OnClickListener l)
@@ -320,6 +336,8 @@ public class PartidaView
         iv_3_0.setImageResource(ResDorso);
         iv_3_1.setImageResource(ResDorso);
         iv_3_2.setImageResource(ResDorso);
+
+        tarjetaRVAdapter.notifyDataSetChanged();
     }
 
     void mostrarTarjetas(Tarjeta tarjetas[][])
@@ -336,6 +354,8 @@ public class PartidaView
         iv_3_0.setImageResource(Res[tarjetas[3][0].getIdImagen()]);
         iv_3_1.setImageResource(Res[tarjetas[3][1].getIdImagen()]);
         iv_3_2.setImageResource(Res[tarjetas[3][2].getIdImagen()]);
+
+        tarjetaRVAdapter.notifyDataSetChanged();
     }
 
     void setVidas(int v)
@@ -360,4 +380,7 @@ public class PartidaView
                 break;
         }
     }
+
+    void updateTarjetaRV(){tarjetaRVAdapter.notifyDataSetChanged();}
+
 }

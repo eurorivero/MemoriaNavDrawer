@@ -5,7 +5,7 @@ package com.example.eurorivero.memoria.Partida;
  */
 
 public class Tarjeta {
-
+    public static int backImageResource;
     public enum TarjetaEstado
     {
         OCULTA,
@@ -13,6 +13,10 @@ public class Tarjeta {
     }
     private TarjetaEstado estado;
     private int idImagen;
+    private int tipo;
+    private int frontImageResource;
+    private int currentImageResource;
+
 
     public Tarjeta()
     {
@@ -38,5 +42,20 @@ public class Tarjeta {
     public void setEstado(TarjetaEstado estado)
     {
         this.estado = estado;
+        if(estado == TarjetaEstado.OCULTA)
+            currentImageResource = backImageResource;
+        else if(estado == TarjetaEstado.VISIBLE)
+            currentImageResource = frontImageResource;
     }
+
+    public void setTipo(int tipo){this.tipo = tipo;}
+
+    public int getTipo(){return this.tipo;}
+
+    int getFrontImageResource(){return this.frontImageResource;}
+
+    void setFrontImageResource(int frontImageResource){this.frontImageResource = frontImageResource;}
+
+    int getCurrentImageResource(){return this.currentImageResource;}
+
 }

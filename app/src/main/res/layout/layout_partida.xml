@@ -1,180 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <TableLayout
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tv_header_partida_vidas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:layout_gravity="center"
-                android:text="@string/vidas"
-                android:textAlignment="center"
-                android:textSize="@dimen/tvHeader"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_header_partida_tiempo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:layout_gravity="center"
-                android:text="@string/tiempo"
-                android:textAlignment="center"
-                android:textSize="@dimen/tvHeader"
-                android:textStyle="bold" />
-        </TableRow>
-
-        <TableRow
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_header_partida_vidas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:layout_gravity="center"
+                        android:text="@string/vidas"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/tvHeader"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_header_partida_tiempo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:layout_gravity="center"
+                        android:text="@string/tiempo"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/tvHeader"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_partida_vidas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:textAlignment="center"
+                        android:text="@string/vidas_9"
+                        android:freezesText="true"/>
+
+                    <Chronometer
+                        android:id="@+id/cCronometro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:textAlignment="center"
+                        android:freezesText="true"/>
+
+                </TableRow>
+
+            </TableLayout>
+
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:columnCount="3">
+
+                <ImageView
+                    android:id="@+id/iv0_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv0_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv0_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv1_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv1_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv1_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv2_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv2_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv2_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv3_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv3_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+                <ImageView
+                    android:id="@+id/iv3_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ivPadding"
+                    app:srcCompat="@drawable/question_icon" />
+
+            </GridLayout>
 
             <TextView
-                android:id="@+id/tv_partida_vidas"
+                android:id="@+id/tv_header_partida_dificultad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0"
+                android:text="@string/dificultad"
                 android:textAlignment="center"
-                android:text="@string/vidas_9"
-                android:freezesText="true"/>
+                android:textSize="@dimen/tvHeader"
+                android:textStyle="bold" />
 
-            <Chronometer
-                android:id="@+id/cCronometro"
+            <TextView
+                android:id="@+id/tv_partida_dificultad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0"
+                android:text="@string/Cargando"
                 android:textAlignment="center"
                 android:freezesText="true"/>
 
-        </TableRow>
+            <Button
+                android:id="@+id/bIniciarTerminar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Iniciar"
+                android:freezesText="true"/>
 
-    </TableLayout>
-
-    <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:columnCount="3">
-
-        <ImageView
-            android:id="@+id/iv0_0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv0_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv0_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv1_0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv1_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv1_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv2_0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv2_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv2_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv3_0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv3_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-        <ImageView
-            android:id="@+id/iv3_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/ivPadding"
-            app:srcCompat="@drawable/question_icon" />
-
-    </GridLayout>
-
-    <TextView
-        android:id="@+id/tv_header_partida_dificultad"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/dificultad"
-        android:textAlignment="center"
-        android:textSize="@dimen/tvHeader"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tv_partida_dificultad"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Cargando"
-        android:textAlignment="center"
-        android:freezesText="true"/>
-
-    <Button
-        android:id="@+id/bIniciarTerminar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Iniciar"
-        android:freezesText="true"/>
-
-</LinearLayout>
-
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_tarjetas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"/>
+        </LinearLayout>
+    </ScrollView >

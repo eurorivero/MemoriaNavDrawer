@@ -1,6 +1,5 @@
 package com.example.eurorivero.memoria.Partida;
 
-import android.app.Activity;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -17,13 +16,14 @@ import com.example.eurorivero.memoria.Ranking;
 import com.example.eurorivero.memoria.RankingDAO;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by Fabiana Nazaret on 25/11/2017.
  */
 
-public class PartidaController implements View.OnClickListener, Chronometer.OnChronometerTickListener{
+public class PartidaController implements View.OnClickListener, Chronometer.OnChronometerTickListener, RVOnItemClick {
 
     private static final PartidaController ourInstance = new PartidaController();
     private PartidaModel pm;
@@ -87,6 +87,81 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
     PartidaView getPv()
     {
         return(this.pv);
+    }
+
+    private void iniciarInspeccion()
+    {
+        pm.estadoPartida = PartidaModel.EstadoPartida.INSPECCION;
+        pv.setTextBotonIniciarTerminar(R.string.Terminar);
+
+        pm.resetVidas();
+        pv.setVidas(pm.getVidas());
+        pv.setDificultad(pm.getDificultad());
+        pm.setTimeout(Configuraciones.getDificultad());
+        pm.desordenarTarjetas();
+        pm.mostrarTarjetas();
+        pv.mostrarTarjetas(pm.getTarjetas());
+        segundos = 0;
+        previousStartTime = startTime;
+        startTime = pv.startChronometerAsTimer(pm.getTimeout());
+
+
+    }
+
+    private void iniciarPartida()
+    {
+        pm.estadoPartida = PartidaModel.EstadoPartida.CORRIENDO;
+        pv.stopChronometer();
+        pm.ocultarTarjetas();
+        pv.ocultarTarjetas();
+        pm.contTjtasMostradas = 0;
+        segundos=0;
+        previousStartTime = startTime;
+        startTime = pv.startChronometer(0);
+        tiempoInicioPartida = startTime;
+
+
+    }
+
+    private void reiniciarPartida()
+    {
+        pm.estadoPartida = PartidaModel.EstadoPartida.INICIAL;
+        pv.setTextBotonIniciarTerminar(R.string.Iniciar);
+        pm.ocultarTarjetas();
+        pv.ocultarTarjetas();
+        pm.resetVidas();
+        pv.setVidas(pm.getVidas());
+        pm.setDificultad(Configuraciones.getDificultad());
+        pv.setDificultad(pm.getDificultad());
+        pv.stopChronometer();
+    }
+
+    void reanudarPartida()
+    {
+        Tarjeta t;
+        for (int i = 0; i < PartidaModel.FILAS; i++)
+        {
+            for (int j = 0; j < PartidaModel.COLUMNAS; j++)
+            {
+                t=pm.getTarjeta(i,j);
+                if(t.getEstado()== Tarjeta.TarjetaEstado.VISIBLE)
+                    pv.mostrarTarjeta(t.getIdImagen(),i,j);
+                else if(t.getEstado()== Tarjeta.TarjetaEstado.OCULTA)
+                    pv.ocultarTarjeta(i,j);
+            }
+        }
+
+        if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION)
+        {
+            previousStartTime = startTime;
+            startTime = pv.startChronometerAsTimer(pm.getTimeout()-(int)segundos);
+        }
+        else if(pm.estadoPartida == PartidaModel.EstadoPartida.CORRIENDO ||
+                pm.estadoPartida == PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES)
+        {
+            previousStartTime = startTime;
+            startTime = pv.startChronometer((int)segundos);
+        }
     }
 
     @Override
@@ -291,32 +366,6 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         Log.d("PC_OnClick","EDO: "+pm.estadoPartida.toString()+" t1: "+t1.getEstado().toString()+" f1: "+f1+" c1: "+c1+" t2: "+t2.getEstado().toString()+" f2:"+f2+" c2: "+c2+" cont: "+pm.contTjtasMostradas);
     }
 
-    private void iniciarPartida()
-    {
-        pm.estadoPartida = PartidaModel.EstadoPartida.CORRIENDO;
-        pv.stopChronometer();
-        pm.ocultarTarjetas();
-        pv.ocultarTarjetas();
-        pm.contTjtasMostradas = 0;
-        segundos=0;
-        previousStartTime = startTime;
-        startTime = pv.startChronometer(0);
-        tiempoInicioPartida = startTime;
-    }
-
-    private void reiniciarPartida()
-    {
-        pm.estadoPartida = PartidaModel.EstadoPartida.INICIAL;
-        pv.setTextBotonIniciarTerminar(R.string.Iniciar);
-        pm.ocultarTarjetas();
-        pv.ocultarTarjetas();
-        pm.resetVidas();
-        pv.setVidas(pm.getVidas());
-        pm.setDificultad(Configuraciones.getDificultad());
-        pv.setDificultad(pm.getDificultad());
-        pv.stopChronometer();
-    }
-
     @Override
     public void onChronometerTick(Chronometer chronometer)
     {
@@ -345,48 +394,90 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         }
     }
 
-    private void iniciarInspeccion()
+    @Override
+    public void onItemClick(int position)
     {
-        pm.estadoPartida = PartidaModel.EstadoPartida.INSPECCION;
-        pv.setTextBotonIniciarTerminar(R.string.Terminar);
+        Tarjeta t = pm.getAlTarjetas().get(position);
 
-        pm.resetVidas();
-        pv.setVidas(pm.getVidas());
-        pv.setDificultad(pm.getDificultad());
-        pm.setTimeout(Configuraciones.getDificultad());
-        pm.desordenarTarjetas();
-        pm.mostrarTarjetas();
-        pv.mostrarTarjetas(pm.getTarjetas());
-        segundos = 0;
-        previousStartTime = startTime;
-        startTime = pv.startChronometerAsTimer(pm.getTimeout());
-    }
-
-    void reanudarPartida()
-    {
-        Tarjeta t;
-        for (int i = 0; i < PartidaModel.FILAS; i++)
+        if(pm.estadoPartida == PartidaModel.EstadoPartida.CORRIENDO)
         {
-            for (int j = 0; j < PartidaModel.COLUMNAS; j++)
+            if(t.getEstado()== Tarjeta.TarjetaEstado.OCULTA)
             {
-                t=pm.getTarjeta(i,j);
-                if(t.getEstado()== Tarjeta.TarjetaEstado.VISIBLE)
-                    pv.mostrarTarjeta(t.getIdImagen(),i,j);
-                else if(t.getEstado()== Tarjeta.TarjetaEstado.OCULTA)
-                    pv.ocultarTarjeta(i,j);
+                t.setEstado(Tarjeta.TarjetaEstado.VISIBLE);
+                pv.updateTarjetaRV();
+                pm.contTjtasMostradas++;
+                switch(pm.contTjtasMostradas)
+                {
+                    case 1:
+                        pm.setPosTarjetasSeleccionadas(0,position);
+                        break;
+                    case 2:
+                        if(!pm.verificarCoincidencia())
+                        {
+                            pm.setPosTarjetasSeleccionadas(1,position);
+                            pm.quitarVida();
+                            pv.setVidas(pm.getVidas());
+                            if(pm.getVidas()==0)
+                            {
+                                pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_FRACASO;
+                                pv.stopChronometer();
+                                pv.setTextBotonIniciarTerminar(R.string.Reiniciar);
+                            }
+                            else
+                            {
+                                pm.estadoPartida = PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES;
+                            }
+                        }
+                        else
+                        {
+                            if(pm.todasTarjetasVisibles())
+                            {
+                                pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_EXITO;
+                                pv.stopChronometer();
+                                pv.setTextBotonIniciarTerminar(R.string.Reiniciar);
+
+                                Ranking rankingPartida = new Ranking();
+                                rankingPartida.setDificultad(pm.getDificultad());
+                                rankingPartida.setDuracion((SystemClock.elapsedRealtime()-tiempoInicioPartida)/1000);
+                                rankingPartida.setFechaHora(DateFormat.getDateTimeInstance().format(new Date()));
+                                rankingPartida.setVidas(pm.getVidas());
+                                rankingPartida.setPosicion(2);
+
+                                RankingDAO rankingDAO = new RankingDAO(db);
+
+                                rankingPartida.setId(rankingDAO.save(rankingPartida));
+
+                                Bundle args = new Bundle();
+                                args.putInt("Posicion",rankingPartida.getPosicion());
+                                args.putString("Dificultad", rankingPartida.getDificultad().toString());
+                                args.putLong("Duracion",rankingPartida.getDuracion());
+                                args.putInt("Vidas",rankingPartida.getVidas());
+                                args.putString("FechaHora",rankingPartida.getFechaHora());
+
+                                Fragment fragment = new ResumenFragment();
+                                fragment.setArguments(args);
+                                FragmentManager fragmentManager = a.getSupportFragmentManager();
+                                fragmentManager.beginTransaction().replace(R.id.contenedor, fragment).commit();
+
+                            }
+                        }
+                        pm.contTjtasMostradas=0;
+                        break;
+                    default:
+                }
             }
         }
-
-        if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION)
+        else if(pm.estadoPartida == PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES)
         {
-            previousStartTime = startTime;
-            startTime = pv.startChronometerAsTimer(pm.getTimeout()-(int)segundos);
-        }
-        else if(pm.estadoPartida == PartidaModel.EstadoPartida.CORRIENDO ||
-                pm.estadoPartida == PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES)
-        {
-            previousStartTime = startTime;
-            startTime = pv.startChronometer((int)segundos);
+            if(t.getEstado()== Tarjeta.TarjetaEstado.OCULTA)
+            {
+                pm.ocultarTarjetas();
+                t.setEstado(Tarjeta.TarjetaEstado.VISIBLE);
+                pm.setPosTarjetasSeleccionadas(0, position);
+                pm.contTjtasMostradas=1;
+                pm.estadoPartida = PartidaModel.EstadoPartida.CORRIENDO;
+                pv.updateTarjetaRV();
+            }
         }
     }
 }

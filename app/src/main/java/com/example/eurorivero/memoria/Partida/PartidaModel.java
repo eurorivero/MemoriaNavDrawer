@@ -5,6 +5,8 @@ import android.view.View;
 
 import com.example.eurorivero.memoria.Configuraciones;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class PartidaModel {
@@ -30,6 +32,8 @@ public class PartidaModel {
     private static int timeout;
     static final int FILAS = 4;
     static final int COLUMNAS = 3;
+    static final int TIPOS = (FILAS * COLUMNAS) / 2;
+    static final int TARJETAS = FILAS * COLUMNAS;
 
     private static Tarjeta[][] tarjetas = new Tarjeta[FILAS][COLUMNAS];
     int contTjtasMostradas;
@@ -40,6 +44,10 @@ public class PartidaModel {
     private static int colTarjetaSeleccionada2;
     private View viewTarjetaSeleccionada2;
     private static Configuraciones.Dificultad dificultad;
+
+    private ArrayList<Tarjeta> alTarjetas = new ArrayList<>();
+    private View pfView;
+    private int[] posTarjetasSeleccionadas = new int[2];
 
     static PartidaModel getInstance() {
         return ourInstance;
@@ -60,6 +68,39 @@ public class PartidaModel {
                 tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
                 tarjetas[i][j].setIdImagen(1);
             }
+        }
+
+        Tarjeta.backImageResource = pfView.getResources().getIdentifier("question_icon", "drawable","com.example.eurorivero.memoria");
+        for (int k = 0; k<TARJETAS; k++)
+        {
+            Tarjeta t = new Tarjeta();
+            t.setEstado(Tarjeta.TarjetaEstado.OCULTA);
+            t.setTipo(k/2);
+            switch(k/2)
+            {
+                case 0:
+                    t.setFrontImageResource(pfView.getResources().getIdentifier("img_1", "drawable","com.example.eurorivero.memoria"));
+                    break;
+                case 1:
+                    t.setFrontImageResource(pfView.getResources().getIdentifier("img_2", "drawable","com.example.eurorivero.memoria"));
+                    break;
+                case 2:
+                    t.setFrontImageResource(pfView.getResources().getIdentifier("img_3", "drawable","com.example.eurorivero.memoria"));
+                    break;
+                case 3:
+                    t.setFrontImageResource(pfView.getResources().getIdentifier("img_4", "drawable","com.example.eurorivero.memoria"));
+                    break;
+                case 4:
+                    t.setFrontImageResource(pfView.getResources().getIdentifier("img_5", "drawable","com.example.eurorivero.memoria"));
+                    break;
+                case 5:
+                    t.setFrontImageResource(pfView.getResources().getIdentifier("img_6", "drawable","com.example.eurorivero.memoria"));
+                    break;
+                default:
+                    t.setFrontImageResource(pfView.getResources().getIdentifier("question_icon", "drawable","com.example.eurorivero.memoria"));
+                    break;
+            }
+            alTarjetas.add(t);
         }
     }
 
@@ -85,9 +126,9 @@ public class PartidaModel {
                 //Log.d("PartidaModel","PartidaModel " + "; i = " + i + "; j = " + j + "; Tipo Tarjeta =" + tarjetas[i][j]);
 
                 contadores[tarjetas[i][j].getIdImagen()]--;
-
             }
         }
+        Collections.shuffle(alTarjetas);
     }
 
     void quitarVida()
@@ -124,6 +165,11 @@ public class PartidaModel {
                 tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
             }
         }
+
+        for(Tarjeta t: alTarjetas)
+        {
+            t.setEstado(Tarjeta.TarjetaEstado.OCULTA);
+        }
     }
 
     void mostrarTarjetas()
@@ -134,6 +180,11 @@ public class PartidaModel {
             {
                 tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.VISIBLE);
             }
+        }
+
+        for(Tarjeta t: alTarjetas)
+        {
+            t.setEstado(Tarjeta.TarjetaEstado.VISIBLE);
         }
     }
 
@@ -229,6 +280,11 @@ public class PartidaModel {
         return(t1.getIdImagen()==t2.getIdImagen());
     }
 
+    boolean verificarCoincidencia()
+    {
+        return(alTarjetas.get(posTarjetasSeleccionadas[0])==alTarjetas.get(posTarjetasSeleccionadas[1]));
+    }
+
     boolean todasLasTarjetasVisibles()
     {
         for (int i = 0; i < FILAS; i++)
@@ -244,6 +300,16 @@ public class PartidaModel {
         return(true);
     }
 
+    boolean todasTarjetasVisibles()
+    {
+        for(Tarjeta t: alTarjetas)
+        {
+            if(t.getEstado()== Tarjeta.TarjetaEstado.OCULTA)
+                return(false);
+        }
+        return(true);
+    }
+
     Configuraciones.Dificultad getDificultad()
     {
         return dificultad;
@@ -252,5 +318,13 @@ public class PartidaModel {
     void setDificultad(Configuraciones.Dificultad dificultad)
     {
         this.dificultad = dificultad;
+    }
+
+    ArrayList<Tarjeta> getAlTarjetas(){return this.alTarjetas;}
+
+    void setPfView(View pfView){this.pfView = pfView;}
+
+    public void setPosTarjetasSeleccionadas(int index, int position) {
+        this.posTarjetasSeleccionadas[index] = position;
     }
 }
