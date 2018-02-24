@@ -69,97 +69,11 @@
 
             </TableLayout>
 
-            <GridLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:columnCount="3">
-
-                <ImageView
-                    android:id="@+id/iv0_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv0_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv0_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv1_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv1_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv1_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv2_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv2_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv2_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv3_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv3_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-                <ImageView
-                    android:id="@+id/iv3_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/ivPadding"
-                    app:srcCompat="@drawable/question_icon" />
-
-            </GridLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_tarjetas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"/>
 
             <TextView
                 android:id="@+id/tv_header_partida_dificultad"
@@ -185,10 +99,5 @@
                 android:text="@string/Iniciar"
                 android:freezesText="true"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_tarjetas"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"/>
         </LinearLayout>
     </ScrollView >

@@ -59,7 +59,6 @@ public class PartidaFragment extends Fragment
         }
 
         pv.setView(v, this, pm.getAlTarjetas(), pc);
-        pv.setTarjetasListeners(pc);
         pv.setBotonIniciarTerminarListener(pc);
         pv.setChronometerListener(pc);
 

@@ -35,14 +35,7 @@ public class PartidaModel {
     static final int TIPOS = (FILAS * COLUMNAS) / 2;
     static final int TARJETAS = FILAS * COLUMNAS;
 
-    private static Tarjeta[][] tarjetas = new Tarjeta[FILAS][COLUMNAS];
     int contTjtasMostradas;
-    private static int filaTarjetaSeleccionada1;
-    private static int colTarjetaSeleccionada1;
-    private View viewTarjetaSeleccionada1;
-    private static int filaTarjetaSeleccionada2;
-    private static int colTarjetaSeleccionada2;
-    private View viewTarjetaSeleccionada2;
     private static Configuraciones.Dificultad dificultad;
 
     private ArrayList<Tarjeta> alTarjetas = new ArrayList<>();
@@ -55,27 +48,15 @@ public class PartidaModel {
 
     private PartidaModel()
     {
-        Log.d("PartidaModel","PartidaModel builder executed");
     }
 
     void inicializarTarjetas()
     {
-        for (int i = 0; i < FILAS; i++)
-        {
-            for (int j = 0; j < COLUMNAS; j++)
-            {
-                tarjetas[i][j] = new Tarjeta();
-                tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
-                tarjetas[i][j].setIdImagen(1);
-            }
-        }
-
         Tarjeta.backImageResource = pfView.getResources().getIdentifier("question_icon", "drawable","com.example.eurorivero.memoria");
         for (int k = 0; k<TARJETAS; k++)
         {
             Tarjeta t = new Tarjeta();
             t.setEstado(Tarjeta.TarjetaEstado.OCULTA);
-            t.setTipo(k/2);
             switch(k/2)
             {
                 case 0:
@@ -106,28 +87,6 @@ public class PartidaModel {
 
     void desordenarTarjetas()
     {
-        int[] contadores = new int[6];
-        Random rn = new Random();
-
-        for (int i = 0; i < 6; i++)
-        {
-            contadores[i] = 2;
-        }
-
-        for (int i = 0; i < FILAS; i++)
-        {
-            for (int j = 0; j < COLUMNAS; j++)
-            {
-                do
-                {
-                    tarjetas[i][j].setIdImagen(rn.nextInt(6));
-                }
-                while (contadores[tarjetas[i][j].getIdImagen()]==0); // Se acabaron los tokens disponibles para ese tipo de tarjeta?
-                //Log.d("PartidaModel","PartidaModel " + "; i = " + i + "; j = " + j + "; Tipo Tarjeta =" + tarjetas[i][j]);
-
-                contadores[tarjetas[i][j].getIdImagen()]--;
-            }
-        }
         Collections.shuffle(alTarjetas);
     }
 
@@ -146,26 +105,8 @@ public class PartidaModel {
         vidas=MAX_VIDAS;
     }
 
-    Tarjeta getTarjeta(int fila, int columna)
-    {
-        return(tarjetas[fila][columna]);
-    }
-
-    Tarjeta[][] getTarjetas()
-    {
-        return(tarjetas);
-    }
-
     void ocultarTarjetas()
     {
-        for (int i = 0; i < FILAS; i++)
-        {
-            for (int j = 0; j < COLUMNAS; j++)
-            {
-                tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.OCULTA);
-            }
-        }
-
         for(Tarjeta t: alTarjetas)
         {
             t.setEstado(Tarjeta.TarjetaEstado.OCULTA);
@@ -174,14 +115,6 @@ public class PartidaModel {
 
     void mostrarTarjetas()
     {
-        for (int i = 0; i < FILAS; i++)
-        {
-            for (int j = 0; j < COLUMNAS; j++)
-            {
-                tarjetas[i][j].setEstado(Tarjeta.TarjetaEstado.VISIBLE);
-            }
-        }
-
         for(Tarjeta t: alTarjetas)
         {
             t.setEstado(Tarjeta.TarjetaEstado.VISIBLE);
@@ -211,93 +144,9 @@ public class PartidaModel {
         return(timeout);
     }
 
-    void mostrarTarjeta(int f, int c)
-    {
-        tarjetas[f][c].setEstado(Tarjeta.TarjetaEstado.VISIBLE);
-    }
-
-    void ocultarTarjeta(int f, int c)
-    {
-        tarjetas[f][c].setEstado(Tarjeta.TarjetaEstado.OCULTA);
-    }
-
-    void setTarjetaSeleccionada(int index ,int f, int c, View v)
-    {
-        if(index == 0)
-        {
-            filaTarjetaSeleccionada1 = f;
-            colTarjetaSeleccionada1 = c;
-            viewTarjetaSeleccionada1 = v;
-        }
-        else if(index == 1)
-        {
-            filaTarjetaSeleccionada2 = f;
-            colTarjetaSeleccionada2 = c;
-            viewTarjetaSeleccionada2 = v;
-        }
-    }
-
-    int  getFilaTarjetaSeleccionada(int index)
-    {
-        if(index==1)
-        {
-            return(filaTarjetaSeleccionada2);
-        }
-        else
-        {
-            return(filaTarjetaSeleccionada1);
-        }
-    }
-
-    int getColTarjetaSeleccionadas(int index)
-    {
-        if(index==1)
-        {
-            return(colTarjetaSeleccionada2);
-        }
-        else
-        {
-            return(colTarjetaSeleccionada1);
-        }
-    }
-
-    View getViewTarjetaSeleccionada(int index)
-    {
-        if(index==1)
-        {
-            return(viewTarjetaSeleccionada2);
-        }
-        else
-        {
-            return(viewTarjetaSeleccionada1);
-        }
-    }
-
-    boolean verificarCoincidencia(int f2, int c2)
-    {
-        Tarjeta t1 = tarjetas[filaTarjetaSeleccionada1][colTarjetaSeleccionada1];
-        Tarjeta t2 = tarjetas[f2][c2];
-        return(t1.getIdImagen()==t2.getIdImagen());
-    }
-
     boolean verificarCoincidencia()
     {
-        return(alTarjetas.get(posTarjetasSeleccionadas[0])==alTarjetas.get(posTarjetasSeleccionadas[1]));
-    }
-
-    boolean todasLasTarjetasVisibles()
-    {
-        for (int i = 0; i < FILAS; i++)
-        {
-            for (int j = 0; j < COLUMNAS; j++)
-            {
-                if(tarjetas[i][j].getEstado()== Tarjeta.TarjetaEstado.OCULTA)
-                {
-                    return(false);
-                }
-            }
-        }
-        return(true);
+        return(alTarjetas.get(posTarjetasSeleccionadas[0]).getCurrentImageResource()==alTarjetas.get(posTarjetasSeleccionadas[1]).getCurrentImageResource());
     }
 
     boolean todasTarjetasVisibles()
@@ -327,4 +176,6 @@ public class PartidaModel {
     public void setPosTarjetasSeleccionadas(int index, int position) {
         this.posTarjetasSeleccionadas[index] = position;
     }
+
+    public int getPosTarjetaSeleccionada(int index){return this.posTarjetasSeleccionadas[index];}
 }

@@ -12,26 +12,13 @@ public class Tarjeta {
         VISIBLE
     }
     private TarjetaEstado estado;
-    private int idImagen;
-    private int tipo;
     private int frontImageResource;
     private int currentImageResource;
 
 
     public Tarjeta()
     {
-        this.idImagen = 0;
         this.estado = TarjetaEstado.OCULTA;
-    }
-
-    public int getIdImagen()
-    {
-        return this.idImagen;
-    }
-
-    public void setIdImagen(int idImagen)
-    {
-        this.idImagen = idImagen;
     }
 
     public TarjetaEstado getEstado()
@@ -47,10 +34,6 @@ public class Tarjeta {
         else if(estado == TarjetaEstado.VISIBLE)
             currentImageResource = frontImageResource;
     }
-
-    public void setTipo(int tipo){this.tipo = tipo;}
-
-    public int getTipo(){return this.tipo;}
 
     int getFrontImageResource(){return this.frontImageResource;}
 
