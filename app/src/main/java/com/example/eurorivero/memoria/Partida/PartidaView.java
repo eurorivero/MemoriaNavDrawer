@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -28,7 +29,6 @@ public class PartidaView
     private static final PartidaView ourInstance = new PartidaView();
     private TextView tvVidas, tvPartidaDificultad;
     private Chronometer cCronometro;
-    private boolean timerOrChronometer;
     private Button bIniciarTerminar;
 
     private RecyclerView rvTarjetas;
@@ -64,42 +64,9 @@ public class PartidaView
         cCronometro.setOnChronometerTickListener(l);
     }
 
-    long startChronometer(int offset)
+    Chronometer getCronometro()
     {
-        timerOrChronometer = false;
-        cCronometro.setBase(SystemClock.elapsedRealtime()-(offset*1000));
-        cCronometro.start();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        {
-            cCronometro.setCountDown(false);
-        }
-        return(cCronometro.getBase());
-    }
-
-    long startChronometerAsTimer(int timeout)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        {
-            cCronometro.setBase(SystemClock.elapsedRealtime()+timeout*1000);
-            cCronometro.setCountDown(true);
-            timerOrChronometer = true;
-            cCronometro.start();
-            return(cCronometro.getBase()-timeout*1000);
-        }
-        else
-        {
-            return(startChronometer(0));
-        }
-    }
-
-    void stopChronometer()
-    {
-        cCronometro.stop();
-    }
-
-    boolean isTimer()
-    {
-        return(timerOrChronometer);
+        return this.cCronometro;
     }
 
     long getBase()
@@ -140,5 +107,7 @@ public class PartidaView
         }
     }
 
-    void updateTarjetaRV(){tarjetaRVAdapter.notifyDataSetChanged();}
+    void updateTarjetaRV(){tarjetaRVAdapter.notifyDataSetChanged();
+
+    }
 }

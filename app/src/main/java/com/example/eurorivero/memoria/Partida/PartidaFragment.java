@@ -77,7 +77,7 @@ public class PartidaFragment extends Fragment
     public void onPause()
     {
         super.onPause();
-        pv.stopChronometer();
+        pc.stopChronometer();
         Log.d("PFonPause ","onPause");
     }
 

@@ -1,6 +1,7 @@
 package com.example.eurorivero.memoria.Partida;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,6 @@ import com.example.eurorivero.memoria.Ranking;
 import com.example.eurorivero.memoria.RankingDAO;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -28,10 +28,11 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
     private static final PartidaController ourInstance = new PartidaController();
     private PartidaModel pm;
     private PartidaView pv;
-    private long previousStartTime;
+
+    private Chronometer cronometro;
     private long startTime;
-    private long currentTime;
-    private long segundos;
+    private long currentTime, currentTimeDifference;
+
     private long tiempoInicioPartida;
     private FragmentActivity a;
     private SQLiteDatabase db;
@@ -43,7 +44,6 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
 
     private PartidaController()
     {
-        previousStartTime = 0;
         startTime = 0;
         Log.d("PartidaController","PartidaController builder executed.");
     }
@@ -76,6 +76,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
         pv.setVidas(pm.getVidas());
         pm.setDificultad(Configuraciones.getDificultad());
         pv.setDificultad(pm.getDificultad());
+        cronometro = pv.getCronometro();
     }
 
     PartidaModel getPm()
@@ -95,64 +96,67 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
 
         pm.resetVidas();
         pv.setVidas(pm.getVidas());
-        pv.setDificultad(pm.getDificultad());
-        pm.setTimeout(Configuraciones.getDificultad());
+
         pm.desordenarTarjetas();
         pm.mostrarTarjetas();
         pv.updateTarjetaRV();
-        segundos = 0;
-        previousStartTime = startTime;
-        startTime = pv.startChronometerAsTimer(pm.getTimeout());
+
+        pv.setDificultad(pm.getDificultad());
+        pm.setTimeout(Configuraciones.getDificultad());
+        startChronometerAsTimer(pm.getTimeout());
     }
 
     private void iniciarPartida()
     {
         pm.estadoPartida = PartidaModel.EstadoPartida.CORRIENDO;
-        pv.stopChronometer();
+
+        stopChronometer();
+
         pm.ocultarTarjetas();
         pv.updateTarjetaRV();
         pm.contTjtasMostradas = 0;
-        segundos=0;
-        previousStartTime = startTime;
-        startTime = pv.startChronometer(0);
+
         tiempoInicioPartida = startTime;
-
-
+        startChronometer(0);
     }
 
     private void reiniciarPartida()
     {
         pm.estadoPartida = PartidaModel.EstadoPartida.INICIAL;
         pv.setTextBotonIniciarTerminar(R.string.Iniciar);
+
         pm.ocultarTarjetas();
         pv.updateTarjetaRV();
+
         pm.resetVidas();
         pv.setVidas(pm.getVidas());
+
         pm.setDificultad(Configuraciones.getDificultad());
         pv.setDificultad(pm.getDificultad());
-        pv.stopChronometer();
+
+        stopChronometer();
     }
 
     void reanudarPartida()
     {
         pv.updateTarjetaRV();
+        cronometro = pv.getCronometro();
 
         if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION)
         {
-            previousStartTime = startTime;
-            startTime = pv.startChronometerAsTimer(pm.getTimeout()-(int)segundos);
+            startChronometerAsTimer(pm.getTimeout()-(int)currentTimeDifference);
         }
         else if(pm.estadoPartida == PartidaModel.EstadoPartida.CORRIENDO ||
                 pm.estadoPartida == PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES)
         {
-            previousStartTime = startTime;
-            startTime = pv.startChronometer((int)segundos);
+            resumeChronometer();
         }
     }
 
     @Override
     public void onClick(View v)
     {
+        Log.d("onClick","EstadoPartida = "+pm.estadoPartida);
         switch(v.getId())
         {
             case R.id.bIniciarTerminar:
@@ -180,15 +184,13 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
     @Override
     public void onChronometerTick(Chronometer chronometer)
     {
-        if(startTime>previousStartTime)
+        currentTime = SystemClock.elapsedRealtime();
+        currentTimeDifference = currentTime-startTime;
+        //elapsedTime = elapsedTime + (currentTime-cronometro.getBase());
+        Log.d("OnChronometerTick","Estado: "+pm.estadoPartida.toString()+" Ch: "+chronometer.hashCode()+"\nct = "+currentTime+"; st = "+startTime+"; ctd = "+currentTimeDifference);
+        if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION && currentTimeDifference > (pm.getTimeout()*1000))
         {
-            segundos++;
-            Log.d("OnChronometerTick","segundos: "+segundos+" estado: "+pm.estadoPartida.toString()+" Ch: "+chronometer.hashCode());
-            currentTime = SystemClock.elapsedRealtime();
-            if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION && segundos>=pm.getTimeout())
-            {
-                iniciarPartida();
-            }
+            iniciarPartida();
         }
     }
 
@@ -218,7 +220,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                             if(pm.getVidas()==0)
                             {
                                 pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_FRACASO;
-                                pv.stopChronometer();
+                                stopChronometer();
                                 pv.setTextBotonIniciarTerminar(R.string.Reiniciar);
                             }
                             else
@@ -231,7 +233,7 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
                             if(pm.todasTarjetasVisibles())
                             {
                                 pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_EXITO;
-                                pv.stopChronometer();
+                                stopChronometer();
                                 pv.setTextBotonIniciarTerminar(R.string.Reiniciar);
 
                                 Ranking rankingPartida = new Ranking();
@@ -279,4 +281,44 @@ public class PartidaController implements View.OnClickListener, Chronometer.OnCh
             }
         }
     }
+
+    void startChronometer(int offset)
+    {
+        cronometro.setBase(SystemClock.elapsedRealtime());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            cronometro.setCountDown(false);
+        }
+        cronometro.start();
+    }
+
+    void startChronometerAsTimer(int timeout)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            cronometro.setCountDown(true);
+
+            startTime = SystemClock.elapsedRealtime();
+            cronometro.setBase(startTime+((long)(timeout*1000)));
+
+            cronometro.start();
+            Log.d("Chronometer","startChronometerAsTimer.\nTimeout = "+timeout+"\nstartTime: "+startTime+"\n"+(startTime+timeout*1000));
+        }
+        else
+        {
+            Log.d("Chronometer","startChronometerAsTimer.\nTimeout = "+timeout+"\nstartTime: "+startTime);
+            startChronometer(0);
+        }
+    }
+
+    void resumeChronometer()
+    {
+        cronometro.setBase(SystemClock.elapsedRealtime()-currentTimeDifference);
+        cronometro.start();
+    }
+    void stopChronometer()
+    {
+        cronometro.stop();
+    }
+
 }
