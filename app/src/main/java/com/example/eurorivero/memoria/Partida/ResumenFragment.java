@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.eurorivero.memoria.R;
-import com.example.eurorivero.memoria.Ranking;
 
 /**
  * Created by euror on 15/02/2018.

@@ -24,7 +24,7 @@ import java.util.List;
  * Created by Fabiana Nazaret on 25/11/2017.
  */
 
-public class PartidaView
+public class PartidaView implements Runnable
 {
     private static final PartidaView ourInstance = new PartidaView();
     private TextView tvVidas, tvPartidaDificultad;
@@ -33,6 +33,10 @@ public class PartidaView
 
     private RecyclerView rvTarjetas;
     private TarjetaRVAdapter tarjetaRVAdapter;
+
+    private long tiempo;
+    private String tiempoString;
+    private int idBlah;
 
     static PartidaView getInstance()
     {
@@ -107,7 +111,29 @@ public class PartidaView
         }
     }
 
-    void updateTarjetaRV(){tarjetaRVAdapter.notifyDataSetChanged();
+    void updateTarjetaRV(){tarjetaRVAdapter.notifyDataSetChanged();}
 
+    void setTiempo(long tiempo){
+        this.tiempo = tiempo;
+    }
+
+    void setIdBlah(int idBlah){this.idBlah = idBlah;}
+
+    @Override
+    public void run() {
+        switch(idBlah)
+        {
+            case 0:
+                long minutes=(tiempo/1000)/60;
+                long seconds=((tiempo)/1000)%60;
+                tiempoString=minutes+":"+seconds;
+                cCronometro.setText(tiempoString);
+                break;
+            case 1:
+                updateTarjetaRV();
+                break;
+            default:
+                break;
+        }
     }
 }

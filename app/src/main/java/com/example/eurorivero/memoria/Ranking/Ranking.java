@@ -1,4 +1,6 @@
-package com.example.eurorivero.memoria;
+package com.example.eurorivero.memoria.Ranking;
+
+import com.example.eurorivero.memoria.Configuraciones;
 
 /**
  * Created by euror on 13/02/2018.

@@ -1,4 +1,4 @@
-package com.example.eurorivero.memoria;
+package com.example.eurorivero.memoria.Ranking;
 
 import java.util.List;
 

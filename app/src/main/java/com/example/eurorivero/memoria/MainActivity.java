@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.eurorivero.memoria.Partida.PartidaFragment;
+import com.example.eurorivero.memoria.Ranking.MyOpenHelper;
+import com.example.eurorivero.memoria.Ranking.RankingsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

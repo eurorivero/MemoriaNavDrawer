@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import com.example.eurorivero.memoria.Configuraciones;
 import com.example.eurorivero.memoria.R;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+
 /**
  * Created by Fabiana Nazaret on 20/11/2017.
  */
@@ -23,6 +26,8 @@ public class PartidaFragment extends Fragment
     PartidaView pv;
     PartidaController pc;
     static SQLiteDatabase db;
+
+    private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
 
     public static PartidaFragment getInstance()
     {
@@ -41,10 +46,13 @@ public class PartidaFragment extends Fragment
     {
         View v = inflater.inflate(R.layout.layout_partida, container, false);
 
+        scheduledThreadPoolExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(2);
+
         conf = Configuraciones.getInstance();
         pc = PartidaController.getInstance();
         pc.setFA(this.getActivity());
         pc.setDB(db);
+        pc.setSTPE(scheduledThreadPoolExecutor);
         pm = PartidaModel.getInstance();
         pm.setPfView(v);
         pv = PartidaView.getInstance();
@@ -77,7 +85,8 @@ public class PartidaFragment extends Fragment
     public void onPause()
     {
         super.onPause();
-        pc.stopChronometer();
+        //pc.pauseChronometer();
+        scheduledThreadPoolExecutor.shutdown();
         Log.d("PFonPause ","onPause");
     }
 

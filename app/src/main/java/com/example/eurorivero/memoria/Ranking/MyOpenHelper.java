@@ -1,4 +1,4 @@
-package com.example.eurorivero.memoria;
+package com.example.eurorivero.memoria.Ranking;
 
 /**
  * Created by euror on 13/02/2018.

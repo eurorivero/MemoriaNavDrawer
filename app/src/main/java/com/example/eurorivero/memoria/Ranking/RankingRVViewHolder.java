@@ -1,8 +1,10 @@
-package com.example.eurorivero.memoria;
+package com.example.eurorivero.memoria.Ranking;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.eurorivero.memoria.R;
 
 /**
  * Created by euror on 14/02/2018.
