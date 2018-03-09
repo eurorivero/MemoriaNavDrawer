@@ -68,7 +68,6 @@ public class PartidaFragment extends Fragment
 
         pv.setView(v, this, pm.getAlTarjetas(), pc);
         pv.setBotonIniciarTerminarListener(pc);
-        pv.setChronometerListener(pc);
 
         if(pc.getPv() == null)
         {
@@ -85,7 +84,6 @@ public class PartidaFragment extends Fragment
     public void onPause()
     {
         super.onPause();
-        //pc.pauseChronometer();
         scheduledThreadPoolExecutor.shutdown();
         Log.d("PFonPause ","onPause");
     }

@@ -126,10 +126,10 @@ public class PartidaModel {
         switch(d)
         {
             case NIVEL1:
-                timeout = 9;
+                timeout = 10;
                 break;
             case NIVEL2:
-                timeout = 6;
+                timeout = 5;
                 break;
             case NIVEL3:
                 timeout = 3;

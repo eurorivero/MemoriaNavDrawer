@@ -63,11 +63,6 @@ public class PartidaView implements Runnable
         rvTarjetas.setAdapter(tarjetaRVAdapter);
     }
 
-    void setChronometerListener(Chronometer.OnChronometerTickListener l)
-    {
-        cCronometro.setOnChronometerTickListener(l);
-    }
-
     Chronometer getCronometro()
     {
         return this.cCronometro;
@@ -135,5 +130,6 @@ public class PartidaView implements Runnable
             default:
                 break;
         }
+        Log.d("runUI","idBlah"+idBlah);
     }
 }
