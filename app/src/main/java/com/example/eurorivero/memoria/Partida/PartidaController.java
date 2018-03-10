@@ -16,7 +16,9 @@ import com.example.eurorivero.memoria.Ranking.Ranking;
 import com.example.eurorivero.memoria.Ranking.RankingDAO;
 
 import java.text.DateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -31,9 +33,6 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
     private PartidaModel pm;
     private PartidaView pv;
 
-    private Chronometer cronometro;
-    private long startTime;
-    private long previousTime, currentTime, elapsedTime;
     private long tsStart,tsStart2,tsTick,etsls, tsPrevSec;
 
     private long tiempoInicioPartida;
@@ -81,7 +80,6 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
         pv.setVidas(pm.getVidas());
         pm.setDificultad(Configuraciones.getDificultad());
         pv.setDificultad(pm.getDificultad());
-        cronometro = pv.getCronometro();
     }
 
     PartidaModel getPm()
@@ -109,11 +107,8 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
         pv.setDificultad(pm.getDificultad());
         pm.setTimeout(Configuraciones.getDificultad());
 
-        startTime = SystemClock.elapsedRealtime();
         tsStart = SystemClock.elapsedRealtime();
         tsPrevSec = tsStart;
-        previousTime = startTime;
-        elapsedTime = 0;
         f = scheduledThreadPoolExecutor.scheduleAtFixedRate(this,0,100, TimeUnit.MILLISECONDS);
     }
 
@@ -128,12 +123,9 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
 
         pm.contTjtasMostradas = 0;
 
-        tiempoInicioPartida = startTime;
-        startTime = SystemClock.elapsedRealtime();
         tsStart = SystemClock.elapsedRealtime();
         tsPrevSec = tsStart;
-        previousTime = startTime;
-        elapsedTime = 0;
+        tiempoInicioPartida = tsStart;
     }
 
     private void reiniciarPartida()
@@ -155,8 +147,6 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
     void reanudarPartida()
     {
         pv.updateTarjetaRV();
-        cronometro = pv.getCronometro();
-        previousTime = SystemClock.elapsedRealtime();
         f = scheduledThreadPoolExecutor.scheduleAtFixedRate(this,0,100, TimeUnit.MILLISECONDS);
     }
 
@@ -177,6 +167,10 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
                         pm.estadoPartida == PartidaModel.EstadoPartida.TERMINADA_FRACASO ||
                         pm.estadoPartida == PartidaModel.EstadoPartida.TERMINADA_EXITO) {
                     reiniciarPartida();
+/*
+                    RankingDAO rankingDAO = new RankingDAO(db);
+                    rankingDAO.deleteAll();
+*/
                 }
                 break;
             default:
@@ -232,13 +226,31 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
                                 rankingPartida.setDuracion((SystemClock.elapsedRealtime()-tiempoInicioPartida)/1000);
                                 rankingPartida.setFechaHora(DateFormat.getDateTimeInstance().format(new Date()));
                                 rankingPartida.setVidas(pm.getVidas());
-                                rankingPartida.setPosicion(2);
 
                                 RankingDAO rankingDAO = new RankingDAO(db);
+                                List<Ranking> rankings = rankingDAO.getAll();
+                                rankings.add(rankingPartida);
+                                for(Ranking r : rankings)
+                                {
+                                    r.setIndicadorPosicion(Ranking.calcularIndicadorPosicion(r));
+                                }
+                                Collections.sort(rankings,Ranking.RankingIndPosComparator);
+                                for(Ranking r : rankings)
+                                {
+                                    r.setPosicion(rankings.indexOf(r)+1);
+                                    if(r==rankingPartida)
+                                    {
+                                        r.setId(rankingDAO.save(r));
+                                    }
+                                    else
+                                    {
+                                        rankingDAO.update(r);
+                                    }
+                                    Log.d("PC",r.toString());
+                                }
 
                                 /* Prueba de update y delete de RankingDAO */
                                 /*
-                                List<Ranking> rankings = rankingDAO.getAll();
                                 Ranking rtbd = rankings.get(0);
                                 rankingDAO.delete(rtbd);
                                 Ranking rtbu = rankings.get(1);
@@ -248,7 +260,6 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
                                 rankingDAO.update(rtbu);
                                 /* Fin de prueba*/
 
-                                rankingPartida.setId(rankingDAO.save(rankingPartida));
 
                                 Bundle args = new Bundle();
                                 args.putInt("Posicion",rankingPartida.getPosicion());
@@ -261,7 +272,6 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
                                 fragment.setArguments(args);
                                 FragmentManager fragmentManager = a.getSupportFragmentManager();
                                 fragmentManager.beginTransaction().replace(R.id.contenedor, fragment).commit();
-
                             }
                         }
                         pm.contTjtasMostradas=0;
@@ -287,41 +297,6 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
 
     @Override
     public void run() {
-/*
-        currentTime = SystemClock.elapsedRealtime();
-
-        if((currentTime-previousTime)>=1000)
-        {
-            elapsedTime = elapsedTime + currentTime-previousTime;
-            if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION && elapsedTime > (pm.getTimeout()*1000))
-            {
-                iniciarPartida();
-            }
-            previousTime = currentTime;
-        }
-/*
-        if(pm.estadoPartida== PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES)
-        {
-            elapsedTimeDesiguales = elapsedTimeDesiguales + currentTime - previousTimeDesiguales;
-            if(elapsedTimeDesiguales > 2000)
-            {
-                pm.estadoPartida = PartidaModel.EstadoPartida.CORRIENDO;
-            }
-        }
-*/
-/*
-        Log.d("run","Estado: "+pm.estadoPartida.toString()+"\nst = "+startTime+"\nct = "+currentTime+"\npt = "+previousTime+"\net = "+ elapsedTime);
-
-        if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION) {
-            pv.setTiempo(((long)pm.getTimeout()*1000)-elapsedTime);
-        }
-        else if(pm.estadoPartida == PartidaModel.EstadoPartida.CORRIENDO || pm.estadoPartida == PartidaModel.EstadoPartida.MOSTRANDO_TARJETAS_DESIGUALES)
-        {
-            pv.setTiempo(elapsedTime);
-        }
-        pv.setIdBlah(0);
-        a.runOnUiThread(pv);
-*/
         tsTick = SystemClock.elapsedRealtime();
         Log.d("run","Estado: "+pm.estadoPartida.toString()+"\ntsStart  = "+tsStart+"\ntsTick   = "+tsTick+"\ntsStart2 = "+tsStart2);
         if(pm.estadoPartida == PartidaModel.EstadoPartida.INSPECCION){

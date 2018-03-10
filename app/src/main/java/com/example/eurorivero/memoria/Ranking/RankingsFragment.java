@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.eurorivero.memoria.R;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,6 +67,11 @@ public class RankingsFragment extends Fragment implements View.OnClickListener{
         rankings.add(r3);
 */
         rankings=rankingDAO.getAll();
+        for(Ranking r : rankings)
+        {
+            r.setIndicadorPosicion(Ranking.calcularIndicadorPosicion(r));
+        }
+        Collections.sort(rankings,Ranking.RankingIndPosComparator);
 
         RecyclerView rvRankings = (RecyclerView)v.findViewById(R.id.rvRankings);
 
@@ -79,8 +85,6 @@ public class RankingsFragment extends Fragment implements View.OnClickListener{
         Ranking r = new Ranking();
         r.setDificultad(Configuraciones.Dificultad.NIVEL3.toString());
         Log.d("RankingsFragment","Dificultad: "+r.getDificultad());
-
-
 
         Ranking ranking = new Ranking();
         ranking.setFechaHora(SystemClock.elapsedRealtime());

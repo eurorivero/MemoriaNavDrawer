@@ -106,4 +106,9 @@ public class RankingDAO implements DAOinterface<Ranking> {
 
         return alRankings;
     }
+
+    @Override
+    public void deleteAll() {
+        db.delete("Rankings", null, null);
+    }
 }

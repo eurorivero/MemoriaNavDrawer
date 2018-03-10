@@ -63,16 +63,6 @@ public class PartidaView implements Runnable
         rvTarjetas.setAdapter(tarjetaRVAdapter);
     }
 
-    Chronometer getCronometro()
-    {
-        return this.cCronometro;
-    }
-
-    long getBase()
-    {
-        return(cCronometro.getBase());
-    }
-
     void setBotonIniciarTerminarListener(View.OnClickListener l)
     {
         bIniciarTerminar.setOnClickListener(l);
