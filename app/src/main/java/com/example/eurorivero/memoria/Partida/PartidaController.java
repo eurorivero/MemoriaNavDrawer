@@ -110,6 +110,9 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
         tsStart = SystemClock.elapsedRealtime();
         tsPrevSec = tsStart;
         f = scheduledThreadPoolExecutor.scheduleAtFixedRate(this,0,100, TimeUnit.MILLISECONDS);
+        pv.setTiempo((long)((pm.getTimeout()-1)*1000));
+        pv.setIdBlah(0);
+        a.runOnUiThread(pv);
     }
 
     private void iniciarPartida()
@@ -141,7 +144,7 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
 
         pm.setDificultad(Configuraciones.getDificultad());
         pv.setDificultad(pm.getDificultad());
-
+        f.cancel(false);
     }
 
     void reanudarPartida()

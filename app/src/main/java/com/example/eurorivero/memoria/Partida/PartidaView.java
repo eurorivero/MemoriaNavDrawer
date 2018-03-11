@@ -110,8 +110,8 @@ public class PartidaView implements Runnable
         {
             case 0:
                 long minutes=(tiempo/1000)/60;
-                long seconds=((tiempo)/1000)%60;
-                tiempoString=minutes+":"+seconds;
+                long seconds=(tiempo/1000)%60;
+                tiempoString=String.format("%02d:%02d",minutes,seconds);
                 cCronometro.setText(tiempoString);
                 break;
             case 1:
