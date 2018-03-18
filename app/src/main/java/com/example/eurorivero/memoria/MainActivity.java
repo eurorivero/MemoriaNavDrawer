@@ -43,6 +43,12 @@ public class MainActivity extends AppCompatActivity
         oh = new MyOpenHelper(this, "BDMemoriaNavDrawer.db3");
         db = oh.getWritableDatabase();
 
+        PartidaFragment partidaFragment;
+        partidaFragment  = PartidaFragment.getInstance();
+        partidaFragment.setDB(db);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.contenedor, partidaFragment).commit();
+
     }
 
     @Override
@@ -70,10 +76,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        /*
         if (id == R.id.action_settings) {
             return true;
         }
-
+*/
         return super.onOptionsItemSelected(item);
     }
 

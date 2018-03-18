@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
+import android.widget.Toast;
 
 import com.example.eurorivero.memoria.Configuraciones;
 import com.example.eurorivero.memoria.R;
@@ -209,6 +210,7 @@ public class PartidaController implements View.OnClickListener, RVOnItemClick, R
                                 pm.estadoPartida = PartidaModel.EstadoPartida.TERMINADA_FRACASO;
                                 f.cancel(false);
                                 pv.setTextBotonIniciarTerminar(R.string.Reiniciar);
+                                Toast.makeText(a, "¡Perdiste!", Toast.LENGTH_SHORT).show();
                             }
                             else
                             {
